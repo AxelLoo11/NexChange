@@ -1,4 +1,6 @@
+import Header from "@/components/Header";
 import type { Metadata } from "next";
+import './globals.css';
 
 export const metadata: Metadata = {
   title: "NexChange",
@@ -12,10 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className="flex bg-stone-800"
-      >
-        {children}
+      <body>
+        <Header />
+        <main>{children}</main>
       </body>
     </html>
   );
