@@ -13,7 +13,7 @@ async function PostDetailModalPage({ params }: { params: { postid: string } }) {
 
     return (
         <PostModal>
-            <div className='m-20 border border-orange-700 flex justify-center items-center'>
+            <div className='border border-orange-700 flex justify-center items-center'>
                 <img
                     src={post.imageUrl}
                     alt="Post"

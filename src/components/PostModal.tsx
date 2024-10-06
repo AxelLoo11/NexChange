@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Button } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
 export default function PostModal({ children }: { children: React.ReactNode }) {
-    const { onClose } = useDisclosure();
+    const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const router = useRouter();
     console.log("The Modal Loaded");
@@ -13,35 +13,33 @@ export default function PostModal({ children }: { children: React.ReactNode }) {
     // Function to handle closing the modal and navigating back
     const handleClose = () => {
         console.log("The Modal Closed");
-        onClose(); // Close the modal
+        setIsOpen(false); // Close the modal
         router.back(); // Navigate to the previous page
     };
 
     return (
-        <>
-            <Modal
-                defaultOpen={true}
-                onClose={handleClose}
-            >
-                <ModalContent>
-                    {() => (
-                        <>
-                            <ModalHeader className="bg-stone-800 text-white">Post Detail</ModalHeader>
-                            <ModalBody className="bg-stone-600 border border-yellow-500">
-                                {children}
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={handleClose}>
-                                    Close
-                                </Button>
-                                <Button color="primary" onPress={handleClose}>
-                                    Action
-                                </Button>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
-        </>
+        <Modal
+            isOpen={isOpen}
+            onClose={handleClose}
+            className="flex flex-col"
+            radius="lg"
+            classNames={{
+                body: "py-6",
+                backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+            }}
+            hideCloseButton={true}
+            scrollBehavior={"inside"}
+        >
+            <ModalContent className="w-[70vw] h-[80vh] mx-[15vw] my-[10vh] rounded-lg">
+                {() => (
+                    <>
+                        <ModalBody className="h-full">
+                            {children}
+                        </ModalBody>
+                    </>
+                )}
+            </ModalContent>
+        </Modal>
     );
 }
