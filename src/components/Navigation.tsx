@@ -10,7 +10,7 @@ const Navigation = ({ userId }: { userId: string }) => {
                 <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" />
                 <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" />
                 <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" />
-                <NavItem href={`history/${userId}`} icon={<AiOutlineHistory />} text="Order"/>
+                <NavItem href={`/order/${userId}`} icon={<AiOutlineHistory />} text="Order"/>
                 <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" />
             </nav>
 
@@ -19,7 +19,7 @@ const Navigation = ({ userId }: { userId: string }) => {
                 <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
                 <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
                 <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />
-                <NavItem href={`history/${userId}`} icon={<AiOutlineHistory />} text="Order" vertical/>
+                <NavItem href={`/order/${userId}`} icon={<AiOutlineHistory />} text="Order" vertical/>
                 <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" vertical />
             </nav>
         </>
