@@ -20,21 +20,26 @@ export default function PostModal({ children }: { children: React.ReactNode }) {
     return (
         <Modal
             isOpen={isOpen}
-            backdrop="blur"
             onClose={handleClose}
             radius="lg"
             classNames={{
-                body: "py-6",
-                backdrop: "bg-[#ded0b2]/50 backdrop-opacity-40",
-                base: "border-[#ded0b2] bg-[#d0ad61] dark:bg-[#d0ad61] text-[#83621b]",
+                backdrop: "bg-[#ded0b2]/70 backdrop-opacity-40",
+                base: "border-[#FFFFFF] bg-[#FFFFFF] dark:bg-[#FFFFFF]",
             }}
             hideCloseButton={true}
             scrollBehavior={"inside"}
         >
-            <ModalContent className="w-[70vw] h-[90vh] mx-[15vw] my-[5vh] rounded-lg shadow-2xl">
+            <ModalContent className="w-full h-full lg:w-[80vw] lg:h-[90vh] lg:mx-[10vw] lg:my-[5vh] lg:rounded-lg lg:shadow-2xl">
                 {() => (
                     <>
-                        <ModalBody className="h-full p-4 w-full">
+                        {/* Close Button */}
+                        <button
+                            onClick={handleClose}
+                            className="absolute h-10 w-10 top-3 right-4 p-2 text-gray-700 bg-gray-50 rounded-full shadow-md hover:bg-gray-200 lg:hidden"
+                        >
+                            &#x2715; {/* Unicode for 'X' symbol */}
+                        </button>
+                        <ModalBody className="h-full w-full">
                             {children}
                         </ModalBody>
                     </>

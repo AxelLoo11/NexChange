@@ -13,7 +13,8 @@ export default function ExplorePage() {
       id: uuidv4() as string,
       title: `Dummy Post ${i + 1}`,
       imageUrl: "https://via.placeholder.com/300",
-      author: "Dummy User"
+      author: "Dummy User",
+      imageList: [],
     });
   }
 
