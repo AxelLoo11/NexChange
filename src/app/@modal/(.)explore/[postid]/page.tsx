@@ -13,13 +13,16 @@ async function PostDetailModalPage({ params }: { params: { postid: string } }) {
 
     return (
         <PostModal>
-            <div className='border border-orange-700 flex justify-center items-center'>
-                <img
-                    src={post.imageUrl}
-                    alt="Post"
-                    className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
+            <div className='border border-orange-700 flex justify-center items-center w-full'>
+                <div className='w-2/3'>
+                    <img
+                        src={post.imageUrl}
+                        alt="Post"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+
+                <div className="w-1/3 grid overflow-auto">
                     <h2 className="font-bold text-md mb-2">{post.title}</h2>
                     <p className="text-sm text-gray-600">{post.author}</p>
                 </div>

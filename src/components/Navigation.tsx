@@ -14,7 +14,7 @@ const Navigation = ({ userId }: { userId: string }) => {
             </nav>
 
             {/* Side navigation for large screens */}
-            <nav className="hidden lg:flex lg:flex-col lg:fixed lg:top-0 lg:left-0 lg:h-full lg:w-40 lg:bg-white lg:shadow-lg lg:items-center lg:py-6" style={{ paddingTop: '6rem' }}>
+            <nav className="hidden lg:flex lg:flex-col lg:fixed lg:top-20 lg:left-0 lg:h-[calc(100vh-5rem)] lg:w-40 lg:bg-white lg:shadow-lg lg:items-center lg:py-2">
                 <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
                 <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
                 <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />

@@ -20,21 +20,21 @@ export default function PostModal({ children }: { children: React.ReactNode }) {
     return (
         <Modal
             isOpen={isOpen}
+            backdrop="blur"
             onClose={handleClose}
-            className="flex flex-col"
             radius="lg"
             classNames={{
                 body: "py-6",
-                backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                backdrop: "bg-[#ded0b2]/50 backdrop-opacity-40",
+                base: "border-[#ded0b2] bg-[#d0ad61] dark:bg-[#d0ad61] text-[#83621b]",
             }}
             hideCloseButton={true}
             scrollBehavior={"inside"}
         >
-            <ModalContent className="w-[70vw] h-[80vh] mx-[15vw] my-[10vh] rounded-lg">
+            <ModalContent className="w-[70vw] h-[90vh] mx-[15vw] my-[5vh] rounded-lg shadow-2xl">
                 {() => (
                     <>
-                        <ModalBody className="h-full">
+                        <ModalBody className="h-full p-4 w-full">
                             {children}
                         </ModalBody>
                     </>

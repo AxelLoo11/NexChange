@@ -1,15 +1,15 @@
+import Header from "@/components/Header";
+
 export default function ExploreLayout({
   children,
-  modal
 }: {
   children: React.ReactNode
-  modal: React.ReactNode
 }) {
 
   return (
-    <>
+    <div className="fixed w-screen h-screen">
+      <Header />
       {children}
-      {modal}
-    </>
+    </div>
   )
 }
