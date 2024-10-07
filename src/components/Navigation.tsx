@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import React from 'react';
-import { AiOutlineHome, AiOutlineMessage, AiOutlinePlus, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineMessage, AiOutlinePlus, AiOutlineUser, AiOutlineHistory } from 'react-icons/ai';
 
 const Navigation = ({ userId }: { userId: string }) => {
     return (
         <>
             {/* Bottom navigation for small screens */}
-            <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg flex justify-around items-center p-4 lg:hidden">
+            <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg h-16 flex justify-around items-center lg:hidden">
                 <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" />
                 <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" />
                 <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" />
+                <NavItem href={`history/${userId}`} icon={<AiOutlineHistory />} text="Order"/>
                 <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" />
             </nav>
 
@@ -18,6 +19,7 @@ const Navigation = ({ userId }: { userId: string }) => {
                 <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
                 <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
                 <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />
+                <NavItem href={`history/${userId}`} icon={<AiOutlineHistory />} text="Order" vertical/>
                 <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" vertical />
             </nav>
         </>
@@ -25,10 +27,10 @@ const Navigation = ({ userId }: { userId: string }) => {
 };
 
 const NavItem = ({ href, icon, text, vertical = false }: { href: string; icon: JSX.Element; text: string; vertical?: boolean }) => (
-    <Link href={href}>
-        <div className={`flex ${vertical ? 'items-center my-4' : ''} text-yellow-600 hover:text-yellow-800 transition items-center`}>
-            {icon}
-            <span className={`text-md font-bold px-2`}>{text}</span>
+    <Link href={href} className={`flex px-5 hover:bg-gray-200 text-yellow-600 hover:text-yellow-800 ${vertical ? 'w-full' : 'w-1/5 h-16'} items-center`}>
+        <div className={`flex ${vertical ? 'my-4' : 'justify-center'} transition items-center w-full`}>
+            <div className='flex-none'>{icon}</div>
+            <span className='text-md font-bold px-2 flex-auto text-center' >{text}</span>
         </div>
     </Link>
 );
