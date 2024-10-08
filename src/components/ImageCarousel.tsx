@@ -24,7 +24,7 @@ const ImageCarousel = ({ imageUrls }: { imageUrls: string[] }) => {
             <img
                 src={imageUrls[currentImageIndex]}
                 alt={`Image ${currentImageIndex + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full max-w-full max-h-full object-contain"
             />
 
             {/* Pagination Arrows (show on hover) */}

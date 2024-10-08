@@ -1,18 +1,11 @@
 import Navigation from '@/components/Navigation';
 import PostDetail from '@/components/PostDetail';
-import { PostInfo } from '@/models/postInfo';
+import { fetchPostInfo } from '@/lib';
 import React from 'react';
-
-async function fetchPost(postid: string): Promise<PostInfo> {
-    console.log("Run Fetch at origin route ...");
-    const dummyImages: string[] = ["https://via.placeholder.com/300", "https://via.placeholder.com/300", "https://via.placeholder.com/300"];
-    const fecthedPost: PostInfo = { id: postid, title: "Test Fetched Post", imageUrl: "https://via.placeholder.com/300", imageList: dummyImages, author: "Dummy", description:"test\ntest\ntest\ntest\ntest\ntest\n" };
-    return fecthedPost;
-}
 
 async function PostDetailPage({ params }: { params: { postid: string } }) {
     const userId = "123"; // later change to fetch user id from header? or other place ...
-    const post = await fetchPost(params.postid);
+    const post = await fetchPostInfo(params.postid);
 
     return (
         <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">

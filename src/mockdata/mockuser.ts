@@ -12,7 +12,7 @@ export const mockUser1: UserInfo = {
     contacts: [
         { name: 'Mike Waston', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
-    email: "testMike@email.com"
+    id: "testuser001",
 };
 
 export const mockUser2: UserInfo = {
@@ -28,7 +28,7 @@ export const mockUser2: UserInfo = {
     contacts: [
         { name: 'Amily Doyle', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
-    email: "testAmily@email.com"
+    id: "testuser002",
 };
 
 export const mockUser3: UserInfo = {
@@ -41,10 +41,10 @@ export const mockUser3: UserInfo = {
         mockPost6, mockPost7, mockPost8, mockPost9
     ],
     contacts: [
-        { name: 'Chris Hotch', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true },
-        { name: 'Chris Hotch', address: '888 Main St', postalCode: '001214', phoneNumber: '123-456-7890', isDefault: false }
+        { name: 'Chris Hotch 1', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true },
+        { name: 'Chris Hotch 2', address: '888 Main St', postalCode: '001214', phoneNumber: '123-456-7890', isDefault: false }
     ],
-    email: "testChris@email.com"
+    id: "testuser003",
 };
 
 export const mockUser4: UserInfo = {
@@ -57,7 +57,7 @@ export const mockUser4: UserInfo = {
     contacts: [
         { name: 'Samasha Mogan', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
-    email: "testSamasha@email.com"
+    id: "testuser004",
 };
 
 export const mockUser5: UserInfo = {
@@ -70,5 +70,7 @@ export const mockUser5: UserInfo = {
     contacts: [
         { name: 'Bob Reid', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
-    email: "testBob@email.com"
+    id: "testuser005",
 };
+
+export const mockUsers: UserInfo[] = [mockUser1, mockUser2, mockUser3, mockUser4, mockUser5];

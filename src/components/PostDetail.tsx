@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageCarousel from './ImageCarousel';
 import { PostInfo } from '@/models/postInfo';
+import Image from 'next/image';
 
 export default function PostDetail(
     { post }: { post: PostInfo }
@@ -18,6 +19,13 @@ export default function PostDetail(
                 <div className="hidden lg:w-1/3 lg:flex lg:flex-col lg:h-full">
                     {/* Owner */}
                     <div className='flex items-center p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
+                        <Image
+                            src={`/images/${post.authorAvatar}.jpg`}
+                            alt="Owner Avatar"
+                            className="p-1 rounded-full"
+                            width={40}
+                            height={40}
+                        />
                         <p className="text-sm text-gray-600 mb-0 text-left">{post.author}</p>
                     </div>
 

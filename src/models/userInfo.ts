@@ -9,8 +9,8 @@ export interface ContactInfo {
 }
 
 export interface UserInfo {
+    id: string;
     nickname: string;
-    email: string;
     imageUrl: string; // NO. of the public images avatar ...
     contacts: ContactInfo[];
     wishlist: PostInfo[];

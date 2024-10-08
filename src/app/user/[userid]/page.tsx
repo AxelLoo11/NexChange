@@ -28,15 +28,11 @@ export default function UserInfoPage({ params }: { params: { userid: string } })
               src={`/images/${fetchedUserInfo.imageUrl}.jpg`}
               alt={`${fetchedUserInfo.nickname}'s profile picture`}
               className="rounded-full"
-              width={60}
-              height={60}
+              width={80}
+              height={80}
             />
             <div className="ml-4">
               <h2 className="text-xl font-bold">{fetchedUserInfo.nickname}</h2>
-              <p>{fetchedUserInfo.email}</p>
-              <div>
-                {/* Contact Display */}
-              </div>
             </div>
           </div>
         </div>
