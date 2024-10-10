@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function UserInfoPage({ params }: { params: { userid: string } }) {
     return (
-        <div className="bg-gray-100 min-h-screen lg:flex w-full">
+        <div className="bg-gray-100 h-[calc(100vh-5rem)] lg:flex w-full">
           <div className='lg:w-40 w-0'>
             <Navigation userId={params.userid} />
           </div>

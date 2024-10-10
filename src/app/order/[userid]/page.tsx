@@ -1,5 +1,8 @@
 import Navigation from '@/components/Navigation'
+import OrderList from '@/components/OrderList';
+import { ChrisOrderList } from '@/mockdata/mockorder';
 import { mockUser3 } from '@/mockdata/mockuser'
+import { OrderInfo } from '@/models/orderInfo';
 import { ContactInfo } from '@/models/userInfo'
 import Link from 'next/link';
 import React from 'react'
@@ -8,8 +11,10 @@ export default function OrderHistoryPage({ params }: { params: { userid: string 
   const contactList: ContactInfo[] = mockUser3.contacts; // dummy data ...
   const defaultContact: ContactInfo = contactList.find(contact => contact.isDefault) as ContactInfo;
 
+  const orderList: OrderInfo[] = ChrisOrderList;
+
   return (
-    <div className="bg-gray-100 min-h-screen lg:flex w-full">
+    <div className="bg-gray-100 min-h-[calc(100vh-5rem)] lg:flex w-full">
       <div className='lg:w-40 w-0'>
         <Navigation userId={params.userid} />
       </div>
@@ -35,8 +40,8 @@ export default function OrderHistoryPage({ params }: { params: { userid: string 
           </div>
         </div>
         {/* Order History Container */}
-        <div className='w-full flex-auto overflow-auto p-4'>
-          Order List ...
+        <div className='w-full flex-auto p-4'>
+          <OrderList orders={orderList} pathname={`/order/${params.userid}`}/>
         </div>
       </div>
     </div>
