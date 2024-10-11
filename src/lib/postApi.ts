@@ -13,8 +13,8 @@ export const fetchPostList = async (): Promise<PostInfo[]> => {
     // return data;
     const dummydata: PostInfo[] = mockPostList;
     return dummydata;
-  } catch (error: any) {
-    throw new Error(`Error fetching Post List: ${error.message}`);
+  } catch (error) {
+    throw new Error(`Error fetching Post List: ${error}`);
   }
 };
 
@@ -33,7 +33,7 @@ export const fetchPostInfo = async (postId: string): Promise<PostInfo> => {
       (p) => p.id === postId
     ) as PostInfo;
     return dummydata;
-  } catch (error: any) {
-    throw new Error(`Error fetching Post info: ${error.message}`);
+  } catch (error) {
+    throw new Error(`Error fetching Post info: ${error}`);
   }
 };

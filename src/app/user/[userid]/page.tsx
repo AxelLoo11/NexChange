@@ -1,5 +1,5 @@
 import Navigation from '@/components/Navigation';
-import { mockUser1, mockUser3 } from '@/mockdata/mockuser';
+import { mockUser3 } from '@/mockdata/mockuser';
 import { UserInfo } from '@/models/userInfo';
 
 import React from 'react';

@@ -1,5 +1,4 @@
 import { OrderInfo, UserDetail } from "@/models/orderInfo";
-import { mockPost3, mockPost4 } from "./mockpost";
 
 const mockUserDetail1: UserDetail = {
     id: "testuser003",

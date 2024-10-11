@@ -33,11 +33,12 @@ export const fetchUserOrders = async (userId: string): Promise<OrderInfo[]> => {
     //   }
     //   const data: OrderInfo[] = await response.json();
     //   return data;
+    console.log("Fetch order for user ", userId);
     const dummydata: OrderInfo[] = ChrisOrderList;
     return dummydata;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(
-      `Error fetching user's order history list: ${error.message}`
+      `Error fetching user's order history list: ${error}`
     );
   }
 };
