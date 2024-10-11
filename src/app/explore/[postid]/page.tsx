@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation';
 import PostDetail from '@/components/PostDetail';
-import { fetchPostInfo } from '@/lib';
+import { fetchPostInfo } from '@/app/_lib';
 import React from 'react';
 
 async function PostDetailPage({ params }: { params: { postid: string } }) {

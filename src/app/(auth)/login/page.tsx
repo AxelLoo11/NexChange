@@ -8,11 +8,41 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempted with:', { email, password });
+    try {
+      console.log('Login attempted with:', { email, password });
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Login failed');
+      }
+
+      const { token } = await res.json();
+      // console.log("The received token is: ", token);
+
+      // Store JWT in cookie
+      if (token) {
+        document.cookie = `jwt=${token}; path=/;`;
+        // console.log("JWT cookie set:", document.cookie);
+        // If you need HttpOnly for security reasons, you'll typically set it on the server side.
+        // document.cookie = `jwt=${token}; path=/; secure; HttpOnly`;
+      }
+
+      // Redirect to protected page on success
+      router.push('/explore');
+    } catch (error) {
+      console.log(error);
+      setError('Invalid credentials. Please try again.');
+    }
   };
 
   return (
@@ -69,6 +99,7 @@ export default function LoginPage() {
                 Login
               </button>
             </div>
+            <div>{error && <p className="text-red-500 mt-2">{error}</p>}</div>
           </form>
 
           <div className="mt-4 text-center">
