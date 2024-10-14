@@ -1,6 +1,7 @@
 import { PostInfo } from "./postInfo";
 
 export interface ContactInfo {
+    id: string;
     name: string;
     address: string;
     postalCode: string;

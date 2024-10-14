@@ -10,7 +10,7 @@ export const mockUser1: UserInfo = {
         mockPost1, mockPost2, mockPost3
     ],
     contacts: [
-        { name: 'Mike Waston', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
+        { id: "mockuser1-c1", name: 'Mike Waston', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
     id: "testuser001",
 };
@@ -26,7 +26,7 @@ export const mockUser2: UserInfo = {
         mockPost4, mockPost5
     ],
     contacts: [
-        { name: 'Amily Doyle', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
+        { id: "mockuser2-c1", name: 'Amily Doyle', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
     id: "testuser002",
 };
@@ -41,8 +41,8 @@ export const mockUser3: UserInfo = {
         mockPost6, mockPost7, mockPost8, mockPost9
     ],
     contacts: [
-        { name: 'Chris Hotch 1', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true },
-        { name: 'Chris Hotch 2', address: '888 Main St', postalCode: '001214', phoneNumber: '123-456-7890', isDefault: false }
+        { id: "mockuser3-c1", name: 'Chris Hotch 1', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true },
+        { id: "mockuser3-c2", name: 'Chris Hotch 2', address: '888 Main St', postalCode: '001214', phoneNumber: '123-456-7890', isDefault: false }
     ],
     id: "testuser003",
 };
@@ -55,7 +55,7 @@ export const mockUser4: UserInfo = {
         mockPost10, mockPost11
     ],
     contacts: [
-        { name: 'Samasha Mogan', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
+        { id: "mockuser4-c1", name: 'Samasha Mogan', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
     id: "testuser004",
 };
@@ -68,7 +68,7 @@ export const mockUser5: UserInfo = {
         mockPost12
     ],
     contacts: [
-        { name: 'Bob Reid', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
+        { id: "mockuser5-c1", name: 'Bob Reid', address: '123 Main St', postalCode: '123654', phoneNumber: '123-456-7890', isDefault: true }
     ],
     id: "testuser005",
 };
