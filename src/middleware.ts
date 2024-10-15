@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
   // Retrieve the JWT from the cookies
-  const token = req.cookies.get('jwt')?.value;
+  const token = req.cookies.get('userid')?.value;
 
   // Check if token exists
   if (!token) {

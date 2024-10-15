@@ -2,9 +2,13 @@ import Navigation from '@/components/Navigation';
 import PostDetail from '@/components/PostDetail';
 import { fetchPostInfo } from '@/app/_lib';
 import React from 'react';
+import { cookies } from 'next/headers';
+
 
 async function PostDetailPage({ params }: { params: { postid: string } }) {
-    const userId = "123"; // later change to fetch user id from header? or other place ...
+    const cookieStore = cookies();
+
+    const userId = cookieStore.get('userid')?.value || "";
     const post = await fetchPostInfo(params.postid);
 
     return (

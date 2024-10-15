@@ -4,7 +4,14 @@ import Navigation from '@/components/Navigation';
 import React, { useState } from 'react'
 
 export default function PostProductPage() {
-  const userId: string = "user123";
+  function getCookie(name: string) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+    return null;
+  }
+  
+  const userId = getCookie('userid') as string;
 
   const [title, setTitle] = useState("");
   const [name, setName] = useState("");

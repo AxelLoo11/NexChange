@@ -26,17 +26,6 @@ export default function LoginPage() {
         throw new Error('Login failed');
       }
 
-      const { token } = await res.json();
-      // console.log("The received token is: ", token);
-
-      // Store JWT in cookie
-      if (token) {
-        document.cookie = `jwt=${token}; path=/;`;
-        // console.log("JWT cookie set:", document.cookie);
-        // If you need HttpOnly for security reasons, you'll typically set it on the server side.
-        // document.cookie = `jwt=${token}; path=/; secure; HttpOnly`;
-      }
-
       // Redirect to protected page on success
       router.push('/explore');
     } catch (error) {

@@ -3,9 +3,12 @@ import Navigation from '@/components/Navigation';
 import { mockPostList } from '@/mockdata/mockpost';
 import { PostInfo } from '@/models/postInfo';
 import React from 'react';
+import { cookies } from 'next/headers';
 
 export default function ExplorePage() {
-  const userId = "testuser003"; // later change to fetch user id from header? or other place ...
+  const cookieStore = cookies();
+
+  const userId = cookieStore.get('userid')?.value || "";
   const dummyPosts: PostInfo[] = mockPostList; // later change to fetch posts from other service ...
 
   return (
