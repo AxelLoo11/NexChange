@@ -5,6 +5,7 @@ import { UserInfo } from '@/models/userInfo';
 import React from 'react';
 import Image from 'next/image';
 import TabGallary from '@/components/TabGallary';
+import LogoutButton from '@/components/LogoutBtn';
 
 export default function UserInfoPage({ params }: { params: { userid: string } }) {
   const fetchedUserInfo: UserInfo = mockUser3 // just for ui design ...
@@ -21,18 +22,21 @@ export default function UserInfoPage({ params }: { params: { userid: string } })
 
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)]">
         {/* User Basic Info Part */}
-        <div className='flex flex-none w-full h-40 bg-white p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
-          <div className="flex items-center">
+        <div className='flex w-full h-40 bg-white p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
+          <div className="flex items-center w-full">
             {/* User Profile Image */}
             <Image
               src={`/images/${fetchedUserInfo.imageUrl}.jpg`}
               alt={`${fetchedUserInfo.nickname}'s profile picture`}
-              className="rounded-full"
+              className="rounded-full flex-none"
               width={80}
               height={80}
             />
-            <div className="ml-4">
+            <div className="ml-4 flex-auto">
               <h2 className="text-xl font-bold">{fetchedUserInfo.nickname}</h2>
+            </div>
+            <div className='flex-none'>
+              <LogoutButton />
             </div>
           </div>
         </div>
