@@ -6,8 +6,14 @@ import React from 'react';
 import Image from 'next/image';
 import TabGallary from '@/components/TabGallary';
 import LogoutButton from '@/components/LogoutBtn';
+import { cookies } from 'next/headers';
 
 export default function UserInfoPage({ params }: { params: { userid: string } }) {
+  const cookieStore = cookies();
+  const userId = cookieStore.get('userid')?.value || ""; // login user's userid
+
+  const isReadOnly: boolean = params.userid === userId ? false : true;
+
   const fetchedUserInfo: UserInfo = mockUser3 // just for ui design ...
   const tabs = [
     { tabName: 'Wish List', tabType: "Post", tabValue: fetchedUserInfo.wishlist },
@@ -17,7 +23,7 @@ export default function UserInfoPage({ params }: { params: { userid: string } })
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-5rem)] lg:flex w-full">
       <div className='lg:w-40 w-0'>
-        <Navigation userId={params.userid} />
+        <Navigation userId={userId} />
       </div>
 
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)]">
@@ -35,9 +41,11 @@ export default function UserInfoPage({ params }: { params: { userid: string } })
             <div className="ml-4 flex-auto">
               <h2 className="text-xl font-bold">{fetchedUserInfo.nickname}</h2>
             </div>
-            <div className='flex-none'>
-              <LogoutButton />
-            </div>
+            {!isReadOnly && (
+              <div className='flex-none'>
+                <LogoutButton />
+              </div>
+            )}
           </div>
         </div>
 

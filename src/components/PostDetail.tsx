@@ -4,8 +4,20 @@ import { PostInfo } from '@/models/postInfo';
 import Image from 'next/image';
 
 export default function PostDetail(
-    { post }: { post: PostInfo }
+    { post, readOnly, isOwner }: { post: PostInfo; readOnly?: boolean; isOwner?: boolean }
 ) {
+    const handleAddFavorite = () => {
+        console.log("Click Favorite!");
+    }
+
+    const handlePurchase = () => {
+        console.log("Click Purchase!");
+    }
+
+    const handleQuery = () => {
+        console.log("Click Query!");
+    }
+
     return (
         <div className='flex flex-col lg:flex-row justify-center items-center w-full h-full'>
             {/* Large Screen */}
@@ -37,9 +49,9 @@ export default function PostDetail(
 
                     {/* Buttons at the bottom */}
                     <div className="flex w-full h-16 rounded-lg px-2 my-2">
-                        <button id={`${post.id}&F`} className="w-1/3 bg-yellow-500 text-white hover:bg-yellow-600">Favorite</button>
-                        <button id={`${post.id}&P`} className="w-1/3 bg-blue-500 text-white hover:bg-blue-700">Purchase</button>
-                        <button id={`${post.id}&Q`} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button>
+                        <button id={`${post.id}&F`} onClick={handleAddFavorite} className="w-1/3 bg-yellow-500 text-white hover:bg-yellow-600">Favorite</button>
+                        <button id={`${post.id}&P`} onClick={handlePurchase} className="w-1/3 bg-blue-500 text-white hover:bg-blue-700">Purchase</button>
+                        <button id={`${post.id}&Q`} onClick={handleQuery} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button>
                     </div>
                 </div>
             </>
