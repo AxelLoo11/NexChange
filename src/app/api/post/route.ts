@@ -14,14 +14,14 @@ async function getTokenFromRequest(req: NextRequest) {
   if (!token || !tokenType) {
     throw new Error("Authorization token or token type missing");
   }
-  return `${tokenType}${token}`; // the space is inclued in tokenType (?) not sure
+  return `${tokenType}${token}`; 
 }
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const postId = searchParams.get("postid");
   const authHeader = await getTokenFromRequest(req);
-  console.log("[TEST]: the generated authHeader is: ", authHeader);
+  console.log("[TEST]: the generated authHeader is:", authHeader);
 
   if (postId) {
     // const res = await fetch(`${API_BASE_URL}/posts/${postId}`, {

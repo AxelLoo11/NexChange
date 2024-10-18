@@ -5,7 +5,7 @@ import PostModal from '@/components/PostModal';
 import { PostInfo } from '@/models/postInfo';
 import React, { useEffect, useState } from 'react';
 
-async function PostDetailModalPage({ params }: { params: { postid: string } }) {
+function PostDetailModalPage({ params }: { params: { postid: string } }) {
     function getCookie(name: string) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -16,19 +16,19 @@ async function PostDetailModalPage({ params }: { params: { postid: string } }) {
     const defaultPost: PostInfo = {
         id: 'defaultPost',
         title: 'Loading ...',
-        imageUrl: '',
+        imageUrl: 'https://avatar.iran.liara.run/public',
         imageList: [],
-        author: 'Loading ...'
+        author: 'Loading ...',
+        authorAvatar: '01'
     };
 
-    const userId = getCookie('userid') as string;
-    const postId = params.postid;
+    const [userId, setUserId] = useState<string>("");
     const [post, setPost] = useState<PostInfo>(defaultPost);
 
     useEffect(() => {
         const fetchPostDetail = async () => {
             try {
-                const response = await fetch(`/api/post?postid=${postId}`, {
+                const response = await fetch(`/api/post?postid=${params.postid}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -45,8 +45,9 @@ async function PostDetailModalPage({ params }: { params: { postid: string } }) {
             }
         };
 
+        setUserId(getCookie('userid') as string);
         fetchPostDetail(); // Call the function to fetch post details
-    }, [postId]); // Depend on postId so the effect runs when it changes
+    }, []); // Depend on postId so the effect runs when it changes
 
     console.log("Intercepting Mounted!!!");
 

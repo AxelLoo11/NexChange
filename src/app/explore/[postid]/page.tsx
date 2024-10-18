@@ -16,19 +16,19 @@ function PostDetailPage({ params }: { params: { postid: string } }) {
     const defaultPost: PostInfo = {
         id: 'defaultPost',
         title: 'Loading ...',
-        imageUrl: '',
+        imageUrl: 'https://avatar.iran.liara.run/public',
         imageList: [],
-        author: 'Loading ...'
+        author: 'Loading ...',
+        authorAvatar: '01'
     };
 
-    const userId = getCookie('userid') as string;
-    const postId = params.postid;
+    const [userId, setUserId] = useState<string>("");
     const [post, setPost] = useState<PostInfo>(defaultPost);
 
     useEffect(() => {
         const fetchPostDetail = async () => {
             try {
-                const response = await fetch(`/api/post?postid=${postId}`, {
+                const response = await fetch(`/api/post?postid=${params.postid}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -45,8 +45,9 @@ function PostDetailPage({ params }: { params: { postid: string } }) {
             }
         };
 
+        setUserId(getCookie('userid') as string);
         fetchPostDetail(); // Call the function to fetch post details
-    }, [postId]); // Depend on postId so the effect runs when it changes
+    }, []); // Depend on postId so the effect runs when it changes
 
     return (
         <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">

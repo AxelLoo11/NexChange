@@ -19,6 +19,14 @@ const ImageCarousel = ({ imageUrls }: { imageUrls: string[] }) => {
         );
     };
 
+    if (imageUrls.length === 0) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-500 font-bold">Loading Images ...</p>
+            </div>
+        );
+    }
+    
     return (
         <div className="relative group w-full h-full">
             <img
