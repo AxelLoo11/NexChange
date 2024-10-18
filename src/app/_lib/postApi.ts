@@ -1,3 +1,5 @@
+"use client";
+
 import { mockPostList } from "@/mockdata/mockpost";
 import { PostInfo } from "@/models/postInfo";
 

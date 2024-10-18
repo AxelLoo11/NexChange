@@ -10,7 +10,7 @@ export default function PostProductPage() {
     if (parts.length === 2) return parts.pop()?.split(';').shift();
     return null;
   }
-  
+
   const userId = getCookie('userid') as string;
 
   const [title, setTitle] = useState("");
@@ -22,6 +22,7 @@ export default function PostProductPage() {
 
   const [shortcutImagePreview, setShortcutImagePreview] = useState<string | null>(null);
   const [productImagesPreview, setProductImagesPreview] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleShortcutImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -52,6 +53,62 @@ export default function PostProductPage() {
     setProductImagesPreview((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
+  // upload images to s3 and get the url before create post
+  const handleImageUpload = async (files: File[]): Promise<string[] | null> => {
+    // Prepare file data for presigned URL request
+    const fileData = files.map((file) => ({
+      filename: file.name,
+      contentType: file.type,
+    }));
+
+    // Request presigned URLs for all files
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ files: fileData }),
+    });
+
+    const { urls, error } = await res.json();
+    if (error) {
+      setError(error);
+      return null;
+    }
+
+    // Upload each file to its presigned URL
+    const uploadPromises = files.map(async (file, idx) => {
+      const { url, fields } = urls[idx];
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', file);
+
+      // Upload the file to S3
+      const uploadRes = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (uploadRes.ok) {
+        // Return the full URL of the uploaded image
+        return `${url}/${fields.Key}`;
+      } else {
+        throw new Error('Upload failed');
+      }
+    });
+
+    try {
+      const uploadedURLs = await Promise.all(uploadPromises);
+      alert('All images uploaded successfully!');
+      return uploadedURLs;
+    } catch (uploadError: any) {
+      setError(uploadError.message);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -60,35 +117,50 @@ export default function PostProductPage() {
       return;
     }
 
-    // Simulate form data submission logic (API call, etc.)
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    if (shortcutImage) {
-      formData.append("shortcutImage", shortcutImage);
-    }
-    productImages.forEach((image, index) => {
-      formData.append(`productImages[${index}]`, image);
-    });
-
     try {
-      // Replace this with actual API call
-      await fakeSubmit(formData);
-      alert("Post submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting post:", error);
-      alert("Error submitting post.");
-    }
-  };
+      // Step 1: Upload images and get their URLs
+      const shortcutUrl: string[] | null = await handleImageUpload([shortcutImage]); // Upload shortcut image
+      const productImageUrls: string[] | null = await handleImageUpload(productImages); // Upload product images
 
-  // Placeholder for submission function (replace with real API)
-  const fakeSubmit = async (formData: FormData) => {
-    formData.forEach((value, key) => {
-      console.log(`Check submitted data - ${key}:`, value);
-    });
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+      if (shortcutUrl === null || productImageUrls === null) {
+        alert("Failed to upload images. Please try again!");
+        return;
+      }
+
+      // Step 2: Prepare the post data
+      const postData = {
+        userId: userId, // Assuming you have userId from state or context
+        postTittle: title, // Assuming postTitle from useState
+        postName: name, // Assuming postName from useState
+        postDescription: description, // Assuming postDescription from useState
+        postPrice: price, // Assuming postPrice from useState
+        postShortcutURL: shortcutUrl[0], // Only one shortcut image URL
+        postImages: productImageUrls.map((url) => ({
+          postImageURL: url, // Each product image URL
+        }))
+      };
+
+      // Step 3: Send the POST request to create the post
+      const response = await fetch('/api/post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+        credentials: 'include', // This includes cookies in the request
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create the post.');
+      }
+
+      alert('Post created successfully!');
+      // need to redirect to explore page ?
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred while creating the post. Please try again.');
+    }
   };
 
   return (
@@ -216,6 +288,8 @@ export default function PostProductPage() {
               </div>
             )}
           </div>
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <div className="mt-6">
             <button

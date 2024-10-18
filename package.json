@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.674.0",
+    "@aws-sdk/s3-presigned-post": "^3.674.0",
     "@nextui-org/react": "^2.4.8",
     "next": "14.2.14",
     "react": "^18",

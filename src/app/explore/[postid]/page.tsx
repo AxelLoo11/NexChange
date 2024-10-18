@@ -1,15 +1,52 @@
+"use client";
+
 import Navigation from '@/components/Navigation';
 import PostDetail from '@/components/PostDetail';
-import { fetchPostInfo } from '@/app/_lib';
-import React from 'react';
-import { cookies } from 'next/headers';
+import { PostInfo } from '@/models/postInfo';
+import React, { useEffect, useState } from 'react';
 
+function PostDetailPage({ params }: { params: { postid: string } }) {
+    function getCookie(name: string) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift();
+        return null;
+    }
 
-async function PostDetailPage({ params }: { params: { postid: string } }) {
-    const cookieStore = cookies();
+    const defaultPost: PostInfo = {
+        id: 'defaultPost',
+        title: 'Loading ...',
+        imageUrl: '',
+        imageList: [],
+        author: 'Loading ...'
+    };
 
-    const userId = cookieStore.get('userid')?.value || "";
-    const post = await fetchPostInfo(params.postid);
+    const userId = getCookie('userid') as string;
+    const postId = params.postid;
+    const [post, setPost] = useState<PostInfo>(defaultPost);
+
+    useEffect(() => {
+        const fetchPostDetail = async () => {
+            try {
+                const response = await fetch(`/api/post?postid=${postId}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch post details');
+                }
+
+                const postData = await response.json();
+                setPost(postData); // Set the fetched post data
+            } catch (error) {
+                console.error(error);
+                // Handle the error as needed, e.g., set an error state or show a notification
+            }
+        };
+
+        fetchPostDetail(); // Call the function to fetch post details
+    }, [postId]); // Depend on postId so the effect runs when it changes
 
     return (
         <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">
