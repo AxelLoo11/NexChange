@@ -1,22 +1,19 @@
 "use client";
 
 import Navigation from '@/components/Navigation';
+import { useUser } from '@/context/UserContext';
 import React, { useState } from 'react'
 
 export default function PostProductPage() {
-  function getCookie(name: string) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift();
-    return null;
-  }
+  const { user } = useUser();
+  const userId = user?.userId || "";
+  const username = user?.userNickName || "";
+  const useravatar = user?.userAvatarURL || "01.jpg"; // given a default url ...
 
-  const userId = getCookie('userid') as string;
-
-  const [title, setTitle] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [shortcutImage, setShortcutImage] = useState<File | null>(null);
   const [productImages, setProductImages] = useState<File[]>([]);
 
@@ -104,7 +101,7 @@ export default function PostProductPage() {
       alert('All images uploaded successfully!');
       return uploadedURLs;
     } catch (uploadError: any) {
-      setError(uploadError.message);
+      setError(uploadError);
       return null;
     }
   };
@@ -137,7 +134,11 @@ export default function PostProductPage() {
         postShortcutURL: shortcutUrl[0], // Only one shortcut image URL
         postImages: productImageUrls.map((url) => ({
           postImageURL: url, // Each product image URL
-        }))
+        })),
+        postSeller: {
+          sellerName: username,
+          sellerAvatarURL: useravatar,
+        }
       };
 
       // Step 3: Send the POST request to create the post
@@ -166,7 +167,7 @@ export default function PostProductPage() {
   return (
     <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">
       <div className='lg:w-40 w-0'>
-        <Navigation userId={userId} />
+        <Navigation />
       </div>
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)] h-[calc(100vh-5rem)] bg-gray-50 overflow-auto p-4">
         <h2 className="text-2xl font-bold mb-6 text-center">
@@ -224,7 +225,7 @@ export default function PostProductPage() {
               type="number"
               id="price"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setPrice(Number(e.target.value))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               required
             />

@@ -2,28 +2,27 @@
 
 import PostDetail from '@/components/PostDetail';
 import PostModal from '@/components/PostModal';
-import { PostInfo } from '@/models/postInfo';
+import { Post } from '@/models';
 import React, { useEffect, useState } from 'react';
 
 function PostDetailModalPage({ params }: { params: { postid: string } }) {
-    function getCookie(name: string) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift();
-        return null;
-    }
-
-    const defaultPost: PostInfo = {
-        id: 'defaultPost',
-        title: 'Loading ...',
-        imageUrl: 'https://avatar.iran.liara.run/public',
-        imageList: [],
-        author: 'Loading ...',
-        authorAvatar: '01'
+    const defaultPost: Post = {
+        postId: 'defaultPost',
+        postTitle: 'Loading ...',
+        postShortcutURL: 'https://avatar.iran.liara.run/public',
+        postImages: [],
+        postSeller: {
+            sellerName: "Loading ...",
+            sellerAvatarURL: "01.jpg",
+        },
+        userId: 'loading ...',
+        postName: 'Loading ...',
+        postDescription: null,
+        postPrice: 0,
+        postStatus: 'ACTIVE'
     };
 
-    const [userId, setUserId] = useState<string>("");
-    const [post, setPost] = useState<PostInfo>(defaultPost);
+    const [post, setPost] = useState<Post>(defaultPost);
 
     useEffect(() => {
         const fetchPostDetail = async () => {
@@ -45,7 +44,6 @@ function PostDetailModalPage({ params }: { params: { postid: string } }) {
             }
         };
 
-        setUserId(getCookie('userid') as string);
         fetchPostDetail(); // Call the function to fetch post details
     }, []); // Depend on postId so the effect runs when it changes
 

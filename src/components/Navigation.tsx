@@ -1,27 +1,35 @@
+"use client";
+
+import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import React from 'react';
 import { AiOutlineHome, AiOutlineMessage, AiOutlinePlus, AiOutlineUser, AiOutlineHistory } from 'react-icons/ai';
 
-const Navigation = ({ userId }: { userId: string }) => {
+const Navigation = () => {
+    const { user } = useUser();
     return (
         <>
-            {/* Bottom navigation for small screens */}
-            <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg h-16 flex justify-around items-center lg:hidden">
-                <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" />
-                <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" />
-                <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" />
-                <NavItem href={`/order/${userId}`} icon={<AiOutlineHistory />} text="Order"/>
-                <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" />
-            </nav>
+            {user ? (
+                <>
+                    {/* Bottom navigation for small screens */}
+                    <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg h-16 flex justify-around items-center lg:hidden">
+                        <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" />
+                        <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" />
+                        <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" />
+                        <NavItem href={`/order/${user.userId}`} icon={<AiOutlineHistory />} text="Order" />
+                        <NavItem href={`/user/${user.userId}`} icon={<AiOutlineUser />} text="Me" />
+                    </nav>
 
-            {/* Side navigation for large screens */}
-            <nav className="hidden lg:flex lg:flex-col lg:fixed lg:top-20 lg:left-0 lg:h-[calc(100vh-5rem)] lg:w-40 lg:bg-white lg:shadow-lg lg:items-center lg:py-2">
-                <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
-                <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
-                <NavItem href={`/chat/${userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />
-                <NavItem href={`/order/${userId}`} icon={<AiOutlineHistory />} text="Order" vertical/>
-                <NavItem href={`/user/${userId}`} icon={<AiOutlineUser />} text="Me" vertical />
-            </nav>
+                    {/* Side navigation for large screens */}
+                    <nav className="hidden lg:flex lg:flex-col lg:fixed lg:top-20 lg:left-0 lg:h-[calc(100vh-5rem)] lg:w-40 lg:bg-white lg:shadow-lg lg:items-center lg:py-2">
+                        <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
+                        <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
+                        <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />
+                        <NavItem href={`/order/${user.userId}`} icon={<AiOutlineHistory />} text="Order" vertical />
+                        <NavItem href={`/user/${user.userId}`} icon={<AiOutlineUser />} text="Me" vertical />
+                    </nav>
+                </>
+            ) : null}
         </>
     );
 };

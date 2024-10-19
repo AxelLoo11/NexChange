@@ -1,22 +1,64 @@
 import Navigation from '@/components/Navigation'
 import OrderList from '@/components/OrderList';
-import { ChrisOrderList } from '@/mockdata/mockorder';
-import { mockUser3 } from '@/mockdata/mockuser'
-import { OrderInfo } from '@/models/orderInfo';
-import { ContactInfo } from '@/models/userInfo'
+import { Order, UserContact } from '@/models';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
-import React from 'react'
+import React from 'react';
 
-export default function OrderHistoryPage({ params }: { params: { userid: string } }) {
-  const contactList: ContactInfo[] = mockUser3.contacts; // dummy data ...
-  const defaultContact: ContactInfo = contactList.find(contact => contact.isDefault) as ContactInfo;
+async function fetchUserContacts(userid: string, authHeader: string): Promise<UserContact[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/contact?userid=${userid}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${authHeader}`, // Include token in headers
+    },
+    cache: 'no-store', // Ensures fresh data is fetched
+  });
 
-  const orderList: OrderInfo[] = ChrisOrderList;
+  if (!res.ok) {
+    throw new Error('Failed to fetch user contacts');
+  }
+
+  const data = await res.json();
+
+  return data;
+}
+
+async function fetchUserOrders(userid: string, authHeader: string): Promise<Order[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order?userid=${userid}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${authHeader}`, // Include token in headers
+    },
+    cache: 'no-store', // Ensures fresh data is fetched
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch orders');
+  }
+
+  const data = await res.json();
+
+  return data;
+}
+
+export default async function OrderHistoryPage({ params }: { params: { userid: string } }) {
+  const cookieStore = cookies();
+  const userId = cookieStore.get('userid')?.value || ""; // login user's userid
+  const token = cookieStore.get('token')?.value || "";
+  const tokenType = cookieStore.get('tokenType')?.value || "";
+  const authHeader: string = `${tokenType}${token}`;
+
+  const contactList: UserContact[] = await fetchUserContacts(userId, authHeader);
+  const defaultContact: UserContact = contactList.find(contact => contact.defaultContact) as UserContact;
+
+  const orderList: Order[] = await fetchUserOrders(userId, authHeader);
 
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-5rem)] lg:flex w-full">
       <div className='lg:w-40 w-0'>
-        <Navigation userId={params.userid} />
+        <Navigation />
       </div>
 
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)]">
@@ -25,9 +67,9 @@ export default function OrderHistoryPage({ params }: { params: { userid: string 
           <h2>User Defualt Contact: </h2>
           <div className='flex w-full h-full border border-gray-600 rounded-lg hover:bg-gray-100'>
             <div className='flex-auto p-2'>
-              <h2>{defaultContact.name}</h2>
-              <p>{defaultContact.phoneNumber}</p>
-              <p>{`${defaultContact.address} - ${defaultContact.postalCode}`}</p>
+              <h2>{defaultContact.contactName}</h2>
+              <p>{defaultContact.contactNumber}</p>
+              <p>{`${defaultContact.contactAddress} - ${defaultContact.postalCode}`}</p>
             </div>
             <div className='flex-none h-full flex justify-center items-center'>
               <Link
@@ -41,7 +83,7 @@ export default function OrderHistoryPage({ params }: { params: { userid: string 
         </div>
         {/* Order History Container */}
         <div className='w-full flex-auto p-4'>
-          <OrderList orders={orderList} pathname={`/order/${params.userid}`}/>
+          <OrderList orders={orderList} pathname={`/order/${params.userid}`} />
         </div>
       </div>
     </div>

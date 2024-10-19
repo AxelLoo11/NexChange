@@ -33,6 +33,6 @@ export async function POST(request: Request) {
 
     return Response.json({ urls });
   } catch (error: any) {
-    return Response.json({ error: error.message });
+    return Response.json({ error: error });
   }
 }

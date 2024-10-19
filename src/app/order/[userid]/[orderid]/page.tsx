@@ -1,27 +1,84 @@
 "use client";
 
 import Navigation from '@/components/Navigation';
-import { ChrisOrderList } from '@/mockdata/mockorder';
-import { OrderInfo } from '@/models/orderInfo';
+import { Order } from '@/models';
 import Link from 'next/link';
-import React from 'react';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 export default function OrderDetailPage({ params }: { params: { userid: string; orderid: string } }) {
-  const order: OrderInfo = ChrisOrderList.find(r => r.id === params.orderid) as OrderInfo;
+  const [order, setOrder] = useState<Order>({
+    orderId: "defaultorder",
+    refBuyer: {
+      userProfile: {
+        userId: 'loading ...',
+        userAvatarURL: '01.jpg',
+        userNickName: 'loading ...',
+      }
+    },
+    refSeller: {
+      userProfile: {
+        userId: 'loading ...',
+        userAvatarURL: '01.jpg',
+        userNickName: 'loading ...'
+      }
+    },
+    refPost: {
+      refPostId: 'loading ...',
+      refPostTitle: 'loading ...',
+      refPostShortcutURL: 'https://avatar.iran.liara.run/public',
+      refPostPrice: 0
+    },
+    createdAt: new Date(2024, 9, 8, 10, 0),
+    orderStatus: "",
+  });
 
-  const handleCancel = () =>{
-    if (order.status === "UNPAID") {
-      console.log("Cancel Order ", order.id);
+  useEffect(() => {
+    let isMounted = true; // Flag to track if the component is mounted
+    async function fetchData() {
+      try {
+        const res = await fetch(`/api/order?orderid=${params.orderid}`, {
+          method: 'GET',
+          cache: 'no-store',
+          credentials: 'include',
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch order details');
+        }
+
+        const data = await res.json();
+
+        // Only update state if the component is still mounted
+        if (isMounted) {
+          setOrder(data);
+        }
+      } catch (error) {
+        console.error('Error fetching order details:', error);
+      }
     }
-    else{
+
+    fetchData();
+
+    // Cleanup function to set the mounted flag to false
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleCancel = () => {
+    if (order?.orderStatus === "UNPAID") {
+      console.log("Cancel Order ", order.orderId);
+    }
+    else {
       console.log("Error Cancel Logic!");
     }
   };
 
   const handlePayment = () => {
-    if (order.status === "UNPAID") {
+    if (order.orderStatus === "UNPAID") {
       // send status change api request ...
-      console.log("Pay Order ", order.id);
+      console.log("Pay Order ", order.orderId);
     }
     else {
       console.log("Error Payment Logic!");
@@ -31,7 +88,7 @@ export default function OrderDetailPage({ params }: { params: { userid: string; 
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-5rem)] lg:flex w-full">
       <div className='lg:w-40 w-0'>
-        <Navigation userId={params.userid} />
+        <Navigation />
       </div>
 
       {/* Order Display */}
@@ -42,33 +99,44 @@ export default function OrderDetailPage({ params }: { params: { userid: string; 
         <h1 className="text-2xl font-bold my-4">Order Detail</h1>
 
         <div className="bg-white shadow-md rounded-lg p-4 mb-4 flex">
-          <img src={order.refPostShortcut} alt={order.refPostTitle} className="w-32 h-32 object-cover rounded-lg mr-6" />
-          <div className="flex-1">
-            <p className="mb-2"><strong>Title:</strong> {order.refPostTitle}</p>
-            <p className="mb-2"><strong>Price:</strong> ${order.refPostPrice.toFixed(2)}</p>
-            <p className="mb-2"><strong>Status:</strong> {order.status}</p>
+          <img src={order.refPost.refPostShortcutURL} alt={order.refPost.refPostTitle} className="w-32 h-32 object-cover rounded-lg mr-6" />
+          <div className="flex flex-1 flex-col">
+            <p className="mb-2 flex-1"><strong>Title:</strong> {order.refPost.refPostTitle}</p>
+            <p className="mb-2 flex-1"><strong>Price:</strong> ${order.refPost.refPostPrice.toFixed(2)}</p>
+            <div className='w-full flex mb-2 flex-1'>
+              <p><strong>Seller:</strong></p>
+              <Image
+                src={`/images/${order.refSeller.userProfile.userAvatarURL}`}
+                alt="Owner Avatar"
+                className="p-1 rounded-full"
+                width={40}
+                height={40}
+              />
+              <p>{order.refSeller.userProfile.userNickName}</p>
+            </div>
+            <p className="mb-2 flex-1"><strong>Status:</strong> {order.orderStatus}</p>
           </div>
         </div>
 
         <div className="bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold mb-2">Seller Details</h2>
-          <p className="mb-1"><strong>Name:</strong> {order.refSeller.name}</p>
-          <p className="mb-1"><strong>Address:</strong> {order.refSeller.address}</p>
-          <p className="mb-1"><strong>Postal Code:</strong> {order.refSeller.postalCode}</p>
-          <p className="mb-1"><strong>Contact Number:</strong> {order.refSeller.contactNumber}</p>
+          <h2 className="text-lg font-semibold mb-2">Order Address Info</h2>
+          <p className="mb-1"><strong>Name:</strong> {order.refBuyer.userProfile.userNickName}</p>
+          <p className="mb-1"><strong>Address:</strong> {order.refBuyer.userContact?.contactAddress}</p>
+          <p className="mb-1"><strong>Postal Code:</strong> {order.refBuyer.userContact?.postalCode}</p>
+          <p className="mb-1"><strong>Contact Number:</strong> {order.refBuyer.userContact?.contactNumber}</p>
         </div>
 
         <div className="flex justify-between my-4">
           <button
-            className={`flex-none w-1/5 mr-1 p-2 rounded-lg ${order.status === 'UNPAID' ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
-            disabled={order.status !== 'UNPAID'}
+            className={`flex-none w-1/5 mr-1 p-2 rounded-lg ${order.orderStatus === 'UNPAID' ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+            disabled={order.orderStatus !== 'UNPAID'}
             onClick={handleCancel}
           >
             Cancel
           </button>
           <button
-            className={`flex-auto ml-1 p-2 rounded-lg ${order.status === 'UNPAID' ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
-            disabled={order.status !== 'UNPAID'}
+            className={`flex-auto ml-1 p-2 rounded-lg ${order.orderStatus === 'UNPAID' ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+            disabled={order.orderStatus !== 'UNPAID'}
             onClick={handlePayment}
           >
             Make Payment

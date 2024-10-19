@@ -1,22 +1,33 @@
-import { mockPostList } from "@/mockdata/mockpost";
+import { fakeposts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 
 const API_BASE_URL = "http://localhost:8082/api/post-system";
 
 async function getTokenFromRequest(req: NextRequest) {
+  const headersList = headers();
+  const auth = headersList.get("Authorization");
+  console.log("-\tGet the Header Authorization: ", auth);
+  if (auth) {
+    return auth;
+  }
+
   const cookieHeader = req.headers.get("cookie") || "";
-  const cookies = Object.fromEntries(
+  const cookies1 = Object.fromEntries(
     cookieHeader.split("; ").map((cookie) => cookie.split("="))
   );
 
-  const token = cookies.token;
-  const tokenType = cookies.tokenType;
+  console.log("The Cookies of this request is: ", cookies1);
+
+  const token = cookies1.token;
+  const tokenType = cookies1.tokenType;
   if (!token || !tokenType) {
     throw new Error("Authorization token or token type missing");
   }
-  return `${tokenType}${token}`; 
+  return `${tokenType}${token}`;
 }
 
+// get all posts | get post by postId
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const postId = searchParams.get("postid");
@@ -25,6 +36,7 @@ export async function GET(req: NextRequest) {
 
   if (postId) {
     // const res = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    //   method: "GET",
     //   headers: {
     //     Authorization: authHeader,
     //   },
@@ -35,10 +47,11 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await res.json();
-    const data = mockPostList.find((p) => p.id === postId);
-    return NextResponse.json(data);
+    const data = fakeposts.find((p) => p.postId === postId);
+    return NextResponse.json(data, { status: 200 });
   } else {
     // const res = await fetch(`${API_BASE_URL}/posts`, {
+    //   method: "GET",
     //   headers: {
     //     Authorization: authHeader,
     //   },
@@ -49,8 +62,8 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await res.json();
-    const data = mockPostList;
-    return NextResponse.json(data);
+    const data = fakeposts;
+    return NextResponse.json(data, { status: 200 });
   }
 }
 

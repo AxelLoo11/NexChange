@@ -1,11 +1,11 @@
 import React from 'react';
-import { OrderInfo } from '@/models/orderInfo';
 import OrderCard from './OrderCard';
+import { Order } from '@/models';
 
-const OrderList = ({ orders, pathname }: { orders: OrderInfo[]; pathname: string }) => (
+const OrderList = ({ orders, pathname }: { orders: Order[]; pathname: string }) => (
   <div className="w-full h-full overflow-auto">
     {orders.map(order => (
-      <OrderCard key={order.id} order={order} pathname={pathname} />
+      <OrderCard key={order.orderId} order={order} pathname={pathname} />
     ))}
   </div>
 );

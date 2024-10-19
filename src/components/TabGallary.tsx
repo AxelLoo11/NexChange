@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useState } from 'react';
-import FeedCard from './FeedCard';
-import { PostInfo } from '@/models/postInfo';
+import { RefPost } from '@/models';
+import RefPostCard from './refPostCard';
 
-interface TabSettings<T> {
+interface TabSettings {
     tabName: string;
-    tabType: string;
-    tabValue: T[]; // Generic array of items for the tab
+    tabValue: RefPost[]; // Generic array of items for the tab
 }
 
-interface TabGallaryProps<T> {
-    tabs: TabSettings<T>[]; // Array of tabs with generic content
+interface TabGallaryProps {
+    tabs: TabSettings[]; // Array of tabs with generic content
 }
 
-const TabGallary = <T,>({ tabs }: TabGallaryProps<T>) => {
+const TabGallary = ({ tabs }: TabGallaryProps) => {
     const [activeTab, setActiveTab] = useState<number>(0);
 
     return (
@@ -39,12 +38,7 @@ const TabGallary = <T,>({ tabs }: TabGallaryProps<T>) => {
                 ) : (
                     tabs[activeTab].tabValue.map((item, index) => (
                         <div key={index}>
-                            {/* Directly rendering the FeedCard for PostInfo */}
-                            {tabs[activeTab].tabType === "Post" ? (
-                                <FeedCard post={item as PostInfo} /> // Assuming item is of type PostInfo
-                            ) : (
-                                <div>No valid post information</div> // Handle cases if not a PostInfo
-                            )}
+                            <RefPostCard post={item} />
                         </div>
                     ))
                 )}

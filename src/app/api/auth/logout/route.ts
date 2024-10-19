@@ -8,6 +8,7 @@ export async function GET() {
   response.cookies.set('userid', '', { maxAge: -1, path: '/' });
   response.cookies.set('token', '', { maxAge: -1, path: '/' });
   response.cookies.set('tokenType', '', { maxAge: -1, path: '/' });
+  response.cookies.set('userData', '', { maxAge: -1, path: '/' });
 
   return response;
 }

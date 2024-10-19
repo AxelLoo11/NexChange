@@ -1,23 +1,23 @@
 "use client";
 
-import { ContactInfo } from "@/models/userInfo";
+import { UserContact } from "@/models";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 interface CreateContactModalProps {
-    onCreate: (contact: ContactInfo) => void;
+    onCreate: (contact: UserContact) => void;
     onClose: () => void;
-    contact?: ContactInfo; // Optional for editing
+    contact?: UserContact; // Optional for editing
 }
 
 const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalProps) => {
-    const [newContact, setNewContact] = useState<ContactInfo>({
-        id: uuidv4() as string,
-        name: "",
-        phoneNumber: "",
-        address: "",
+    const [newContact, setNewContact] = useState<UserContact>({
+        contactId: uuidv4() as string,
+        contactName: "",
+        contactNumber: "",
+        contactAddress: "",
         postalCode: "",
-        isDefault: false,
+        defaultContact: false,
     });
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalPr
     }, [contact]);
 
     const handleSubmit = () => {
-        if (!newContact.name || !newContact.phoneNumber || !newContact.address || !newContact.postalCode) {
+        if (!newContact.contactName || !newContact.contactNumber || !newContact.contactAddress || !newContact.postalCode) {
             alert("All fields are required.");
             return;
         }
@@ -46,8 +46,8 @@ const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalPr
                     <input
                         type="text"
                         className="w-full border px-3 py-2 rounded-md"
-                        value={newContact.name}
-                        onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                        value={newContact.contactName}
+                        onChange={(e) => setNewContact({ ...newContact, contactName: e.target.value })}
                     />
                 </div>
                 <div className="mb-4">
@@ -55,8 +55,8 @@ const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalPr
                     <input
                         type="text"
                         className="w-full border px-3 py-2 rounded-md"
-                        value={newContact.phoneNumber}
-                        onChange={(e) => setNewContact({ ...newContact, phoneNumber: e.target.value })}
+                        value={newContact.contactNumber}
+                        onChange={(e) => setNewContact({ ...newContact, contactNumber: e.target.value })}
                     />
                 </div>
                 <div className="mb-4">
@@ -64,8 +64,8 @@ const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalPr
                     <input
                         type="text"
                         className="w-full border px-3 py-2 rounded-md"
-                        value={newContact.address}
-                        onChange={(e) => setNewContact({ ...newContact, address: e.target.value })}
+                        value={newContact.contactAddress}
+                        onChange={(e) => setNewContact({ ...newContact, contactAddress: e.target.value })}
                     />
                 </div>
                 <div className="mb-4">

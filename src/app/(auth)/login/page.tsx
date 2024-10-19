@@ -1,11 +1,14 @@
 "use client";
 
+import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { setUser } = useUser(); // Get setUser from UserContext
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,6 +28,25 @@ export default function LoginPage() {
       if (!res.ok) {
         throw new Error('Login failed');
       }
+
+      const { data } = await res.json();
+      console.log("The returned userid is: ", data);
+
+      const profileRes = await fetch(`/api/user/profile?userid=${data}`,{
+        method: 'GET',
+        credentials: "include"
+      });
+
+      if (!profileRes.ok) {
+        throw new Error('Fetch User Profile Failed ...');
+      }
+
+      const profileData = await profileRes.json();
+      console.log("Fetched User Profile is: ", profileData);
+
+      setUser(profileData);
+      // Set user data in cookies
+      document.cookie = `userData=${encodeURIComponent(JSON.stringify(profileData))}; path=/; max-age=${60 * 60 * 24}`; // 1-day expiration
 
       // Redirect to protected page on success
       router.push('/explore');

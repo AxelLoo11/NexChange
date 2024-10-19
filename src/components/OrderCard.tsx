@@ -1,29 +1,29 @@
-import { OrderInfo } from '@/models/orderInfo';
+import { Order } from '@/models';
 import Link from 'next/link';
 import React from 'react';
 
-export default function OrderCard({ order, pathname }: { order: OrderInfo; pathname: string }) {
+export default function OrderCard({ order, pathname }: { order: Order; pathname: string }) {
     const orderColor: string = "G"; // logical need to be added later ...
 
     return (
         <div className={`flex w-full h-32 border border-gray-200 bg-white my-2 shadow-md`}
         >
             <img
-                src={order.refPostShortcut}
+                src={order.refPost.refPostShortcutURL}
                 alt="Order Shortcut"
                 className='w-32 h-32 rounded-sm flex-none p-2'
             />
 
             <div className='flex flex-auto flex-col p-2'>
                 <Link
-                    href={`${pathname}/${order.id}`}
+                    href={`${pathname}/${order.orderId}`}
                     className='w-full text-yellow-700 hover:text-yellow-900 font-bold text-lg hover:underline'
                 >
-                    {order.refPostTitle}
+                    {order.refPost.refPostTitle}
                 </Link>
 
                 <div className='w-full font-light'>
-                    <p>Price: ${order.refPostPrice}</p>
+                    <p>Price: ${order.refPost.refPostPrice}</p>
                 </div>
 
                 <div className='w-full font-bold'>
@@ -34,7 +34,7 @@ export default function OrderCard({ order, pathname }: { order: OrderInfo; pathn
                                 orderColor === 'Y' ? 'text-yellow-500' :
                                     orderColor === 'B' ? 'text-gray-500' : ''
                     }>
-                        {order.status}
+                        {order.orderStatus}
                     </span>
                 </div>
             </div>

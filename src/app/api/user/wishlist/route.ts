@@ -1,34 +1,21 @@
+import { getTokenFromRequest } from "@/lib";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = "http://localhost:8081/api/user-system/wish-posts";
 
-async function getTokenFromRequest(req: NextRequest) {
-  const cookieHeader = req.headers.get("cookie") || "";
-  const cookies = Object.fromEntries(
-    cookieHeader.split("; ").map((cookie) => cookie.split("="))
-  );
-
-  const token = cookies.token;
-  const tokenType = cookies.tokenType;
-  if (!token || !tokenType) {
-    throw new Error("Authorization token or token type missing");
-  }
-  return `${tokenType}${token}`; // the space is inclued in tokenType (?) not sure
-}
-
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
-  const { searchParams, pathname } = new URL(req.url);
+  const { searchParams } = new URL(req.url);
+
+  const userId = searchParams.get("userid");
+  const postId = searchParams.get("postid");
+
+  if (!userId) {
+    return new NextResponse("Missing necessary parameters", { status: 400 });
+  }
 
   // Handle specific wish post compare
-  if (pathname.includes("/compare")) {
-    const userId = searchParams.get("userId");
-    const postId = searchParams.get("postId");
-
-    if (!userId || !postId) {
-      return new NextResponse("Missing userId or postId", { status: 400 });
-    }
-
+  if (postId) {
     try {
       const response = await fetch(
         `${API_BASE_URL}/compare?userId=${userId}&postId=${postId}`,
@@ -54,9 +41,6 @@ export async function GET(req: NextRequest) {
   }
 
   // Handle fetching wish posts by userId
-  const segments = pathname.split("/");
-  const userId = segments[segments.length - 1]; // Extract userId from URL
-
   try {
     const response = await fetch(`${API_BASE_URL}/${userId}`, {
       method: "GET",
