@@ -1,31 +1,8 @@
 import { fakeposts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
+import { getTokenFromRequest } from "@/lib";
 
 const API_BASE_URL = "http://localhost:8082/api/post-system";
-
-async function getTokenFromRequest(req: NextRequest) {
-  const headersList = headers();
-  const auth = headersList.get("Authorization");
-  console.log("-\tGet the Header Authorization: ", auth);
-  if (auth) {
-    return auth;
-  }
-
-  const cookieHeader = req.headers.get("cookie") || "";
-  const cookies1 = Object.fromEntries(
-    cookieHeader.split("; ").map((cookie) => cookie.split("="))
-  );
-
-  console.log("The Cookies of this request is: ", cookies1);
-
-  const token = cookies1.token;
-  const tokenType = cookies1.tokenType;
-  if (!token || !tokenType) {
-    throw new Error("Authorization token or token type missing");
-  }
-  return `${tokenType}${token}`;
-}
 
 // get all posts | get post by postId
 export async function GET(req: NextRequest) {

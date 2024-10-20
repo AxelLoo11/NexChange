@@ -33,3 +33,84 @@ export async function GET(req: NextRequest) {
     return new NextResponse("Error fetch user contacts", { status: 500 });
   }
 }
+
+export async function POST(req: NextRequest) {
+  const authHeader = await getTokenFromRequest(req);
+  const body = await req.json();
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/new-contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create new contact" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  const authHeader = await getTokenFromRequest(req);
+  const body = await req.json();
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to update contact" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const authHeader = await getTokenFromRequest(req);
+  const { searchParams } = new URL(req.url);
+  const contactListId = searchParams.get("contactListId");
+  const contactId = searchParams.get("contactId");
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/delete?contactListId=${contactListId}&contactId=${contactId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: authHeader,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return NextResponse.json({ message: "Contact deleted successfully" });
+    } else {
+      return NextResponse.json(
+        { error: "Failed to delete contact" },
+        { status: response.status }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to delete contact" },
+      { status: 500 }
+    );
+  }
+}
