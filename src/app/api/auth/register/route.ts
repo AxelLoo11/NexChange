@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 
-const userServiceUrl: string =
-  "http://localhost:8081/api/user-system/auth/login";
+const API_BASE_URL: string = "http://localhost:8081/api/user-system/users";
 
 export async function POST(req: Request) {
-  const { email, password, nickname, avatar } = await req.json();
+  const { email, password, nickname, selectedAvatar } = await req.json();
 
-  const userServiceResponse = await fetch(userServiceUrl, {
+  const userServiceResponse = await fetch(`${API_BASE_URL}/new-user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,8 +13,8 @@ export async function POST(req: Request) {
     body: JSON.stringify({
       userEmail: email,
       userPassword: password,
-      nickname: nickname,
-      avatar: avatar,
+      userName: nickname,
+      userAvatarURL: selectedAvatar,
     }),
   });
 

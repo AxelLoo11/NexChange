@@ -13,7 +13,7 @@ const RegisterPage = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const avatars = ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg"]; // List of available avatars
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -22,8 +22,17 @@ const RegisterPage = () => {
 
     try {
       // Perform registration logic here (e.g., API call)
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, nickname, selectedAvatar }),
+      });
 
-
+      if (!res.ok) {
+        throw new Error('Registry Failed');
+      }
 
       router.push('/login');
     } catch (error) {

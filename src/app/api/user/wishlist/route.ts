@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = "http://localhost:8081/api/user-system/wish-posts";
 
+// Get wishpost by userid || determine whether post in wishlist
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);
@@ -62,6 +63,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// add new post to wishpost list ( how to get the wishlist id ????? )
 export async function POST(request: NextRequest) {
   const authHeader = await getTokenFromRequest(request);
   const body = await request.json(); // Get the request body
@@ -89,6 +91,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// remove post from wishpost list
 export async function DELETE(request: NextRequest) {
   const authHeader = await getTokenFromRequest(request);
   const { searchParams } = new URL(request.url);

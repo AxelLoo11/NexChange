@@ -25,7 +25,7 @@ async function fetchUserContacts(userid: string, authHeader: string): Promise<Us
 }
 
 async function fetchUserOrders(userid: string, authHeader: string): Promise<Order[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order?userid=${userid}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/orderhistory?userid=${userid}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ async function fetchUserOrders(userid: string, authHeader: string): Promise<Orde
   });
 
   if (!res.ok) {
-    throw new Error('Failed to fetch orders');
+    throw new Error('Failed to fetch order histories');
   }
 
   const data = await res.json();

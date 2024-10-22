@@ -3,6 +3,7 @@ import { getTokenFromRequest } from "@/lib";
 
 const API_BASE_URL = "http://localhost:8083/api/order-system/orders";
 
+// get order by orderid/sellerid/userid ... ?
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
 
@@ -43,22 +44,30 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// create new order ???? GET ????
 export async function POST(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
-  const body = await req.json();
+  const { userId, postId } = await req.json();
 
   try {
-    const response = await fetch(`${API_BASE_URL}/new-order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authHeader,
-      },
-      body: JSON.stringify(body),
-    });
+    const res = await fetch(
+      `${API_BASE_URL}/new-order?userId=${userId}&postId=${postId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: authHeader,
+        },
+      }
+    );
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    if (!res.ok) {
+      throw new Error("Failed to create new order");
+    }
+
+    return NextResponse.json(
+      { message: "Create New order Success ..." },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create new order" },
@@ -67,32 +76,33 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// may be not needed ?????? or missing variables ?
+// cancel order by order id ...
 export async function DELETE(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
-  const body = await req.json();
+  const { searchParams } = new URL(req.url);
+
+  const orderId = searchParams.get("orderId");
 
   try {
-    const response = await fetch(`${API_BASE_URL}/delete`, {
-      method: "DELETE",
+    const response = await fetch(`${API_BASE_URL}/cancel?orderId=${orderId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: authHeader,
       },
-      body: JSON.stringify(body),
     });
 
     if (response.ok) {
-      return NextResponse.json({ message: "Order deleted successfully" });
+      return NextResponse.json({ message: "Order cancelled successfully" });
     } else {
       return NextResponse.json(
-        { error: "Failed to delete order" },
+        { error: "Failed to cancel order" },
         { status: response.status }
       );
     }
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to delete order" },
+      { error: "Failed to cancel order" },
       { status: 500 }
     );
   }
