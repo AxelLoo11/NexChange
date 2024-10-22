@@ -6,7 +6,7 @@ const API_BASE_URL = "http://localhost:8081/api/user-system/contacts";
 
 // get contacts by userid
 export async function GET(req: NextRequest) {
-  const authHeader = await getTokenFromRequest(req);
+  // const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -30,10 +30,13 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const listId = fakeuserContactLists.find(lid => lid.userId === userId);
-    const data = fakeuserContacts.filter(c => c.contactListId === listId?.contactListId);
+    const listId = fakeuserContactLists.find((lid) => lid.userId === userId);
+    const data = fakeuserContacts.filter(
+      (c) => c.contactListId === listId?.contactListId
+    );
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error fetch user contacts", { status: 500 });
   }
 }
@@ -56,6 +59,7 @@ export async function POST(req: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to create new contact" },
       { status: 500 }
@@ -81,6 +85,7 @@ export async function PUT(req: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to update contact" },
       { status: 500 }
@@ -115,6 +120,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to delete contact" },
       { status: 500 }

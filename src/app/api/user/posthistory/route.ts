@@ -1,11 +1,12 @@
 import { getTokenFromRequest } from "@/lib";
-import { fakeposts, userinfoList } from "@/mockdata";
+import { userinfoList } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = "http://localhost:8081/api/user-system/post-histories";
+// const API_BASE_URL = "http://localhost:8081/api/user-system/post-histories";
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
+  console.log("[TEST]: authheader: ", authHeader);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -29,10 +30,11 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const oridata = userinfoList.find(uif => uif.userId === userId);
+    const oridata = userinfoList.find((uif) => uif.userId === userId);
     const data = oridata?.userPostHistoryList;
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error fetch user post history", { status: 500 });
   }
 }

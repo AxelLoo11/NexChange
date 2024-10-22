@@ -6,7 +6,7 @@ const API_BASE_URL = "http://localhost:8081/api/user-system/wish-posts";
 
 // Get wishpost by userid || determine whether post in wishlist
 export async function GET(req: NextRequest) {
-  const authHeader = await getTokenFromRequest(req);
+  // const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -43,6 +43,7 @@ export async function GET(req: NextRequest) {
       const data = checkResult ? "true" : "false";
       return new NextResponse(JSON.stringify(data), { status: 200 });
     } catch (error) {
+      console.log(error);
       return new NextResponse("Error comparing wish post", { status: 500 });
     }
   }
@@ -63,10 +64,11 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const oridata = userinfoList.find(uif => uif.userId === userId);
+    const oridata = userinfoList.find((uif) => uif.userId === userId);
     const data = oridata?.userWishPostList;
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error fetching wish posts", { status: 500 });
   }
 }
@@ -95,6 +97,7 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     return new NextResponse(JSON.stringify(data), { status: 201 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error creating wish post", { status: 500 });
   }
 }
@@ -131,6 +134,7 @@ export async function DELETE(request: NextRequest) {
 
     return new NextResponse("Wish post deleted successfully", { status: 204 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error deleting wish post", { status: 500 });
   }
 }

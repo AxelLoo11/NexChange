@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 const API_BASE_URL = "http://localhost:8081/api/user-system/order-histories";
 
 export async function GET(req: NextRequest) {
-  const authHeader = await getTokenFromRequest(req);
+  // const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
     );
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error fetch user order history", { status: 500 });
   }
 }

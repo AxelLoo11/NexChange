@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     const urls = await Promise.all(
       files.map(async (file) => {
         const { filename, contentType } = file;
+        console.log(filename);
         const { url, fields } = await createPresignedPost(client, {
           Bucket: process.env.AWS_BUCKET_NAME as string,
           Key: uuidv4(), // Unique key for each image
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
     );
 
     return Response.json({ urls });
-  } catch (error: any) {
+  } catch (error) {
     return Response.json({ error: error });
   }
 }

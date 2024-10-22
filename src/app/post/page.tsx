@@ -100,8 +100,9 @@ export default function PostProductPage() {
       const uploadedURLs = await Promise.all(uploadPromises);
       alert('All images uploaded successfully!');
       return uploadedURLs;
-    } catch (uploadError: any) {
-      setError(uploadError);
+    } catch (uploadError) {
+      console.log(uploadError);
+      setError("Upload failed ...");
       return null;
     }
   };

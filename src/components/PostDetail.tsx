@@ -19,6 +19,7 @@ export default function PostDetail(
     const handleQuery = () => {
         console.log("Click Query!");
     }
+    console.log(readOnly, isOwner);
 
     return (
         <div className='flex flex-col lg:flex-row justify-center items-center w-full h-full'>
