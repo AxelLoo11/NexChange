@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { RefPost } from '@/models';
-import RefPostCard from './refPostCard';
+import RefPostCard from './RefPostCard';
 
 interface TabSettings {
     tabName: string;
@@ -17,9 +17,9 @@ const TabGallary = ({ tabs }: TabGallaryProps) => {
     const [activeTab, setActiveTab] = useState<number>(0);
 
     return (
-        <div className="w-full flex-auto overflow-auto">
+        <div className="w-full h-full flex flex-col">
             {/* Tabs */}
-            <div className="flex w-full justify-center mb-4">
+            <div className="flex w-full justify-center mb-4 flex-none">
                 {tabs.map((tab, index) => (
                     <button
                         key={index}
@@ -32,7 +32,7 @@ const TabGallary = ({ tabs }: TabGallaryProps) => {
             </div>
 
             {/* Content for the active tab */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-auto flex-auto">
                 {tabs[activeTab].tabValue.length === 0 ? ( // Check if the tabValue array is empty
                     <div className="col-span-full text-center">Currently Null</div> // Display message if empty
                 ) : (

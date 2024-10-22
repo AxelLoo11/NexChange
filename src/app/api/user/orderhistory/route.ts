@@ -1,6 +1,7 @@
 import { getTokenFromRequest } from "@/lib";
+import { fakeorders } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
-
+// needed?
 const API_BASE_URL = "http://localhost:8081/api/user-system/order-histories";
 
 export async function GET(req: NextRequest) {
@@ -14,20 +15,23 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: authHeader,
+    //   },
+    // });
 
-    if (!response.ok) {
-      return new NextResponse("Failed to fetch user order history", {
-        status: response.status,
-      });
-    }
+    // if (!response.ok) {
+    //   return new NextResponse("Failed to fetch user order history", {
+    //     status: response.status,
+    //   });
+    // }
 
-    const data = await response.json();
+    // const data = await response.json();
+    const data = fakeorders.filter(
+      (oh) => oh.refBuyer.userProfile.userId === userId
+    );
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     return new NextResponse("Error fetch user order history", { status: 500 });

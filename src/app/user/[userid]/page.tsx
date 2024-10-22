@@ -21,6 +21,7 @@ async function fetchUserWishList(userId: string, authHeader: string): Promise<Us
   }
 
   const data = await res.json();
+  // console.log("Fetched WishPosts: ", data);
 
   return data;
 }
@@ -39,7 +40,10 @@ async function fetchUserPostHistory(userId: string, authHeader: string): Promise
     throw new Error('Failed to fetch Post Historys');
   }
 
-  return res.json();
+  const data = await res.json();
+  // console.log("Fetched PostHistories: ", data);
+
+  return data;
 }
 
 export default async function UserInfoPage({ params }: { params: { userid: string } }) {
@@ -72,7 +76,7 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
         <Navigation />
       </div>
 
-      <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)]">
+      <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)] h-full">
         {/* User Basic Info Part */}
         <div className='flex w-full h-40 bg-white p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
           <div className="flex items-center w-full">
@@ -96,7 +100,7 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
         </div>
 
         {/* User Wishlist & Post History Gallary with Navigation Bar */}
-        <div className='w-full flex-auto overflow-auto p-4'>
+        <div className='w-full flex-auto p-4 h-[calc(100vh-15rem)]'>
           <TabGallary
             tabs={tabs}
           />

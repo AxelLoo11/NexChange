@@ -1,8 +1,10 @@
 import { getTokenFromRequest } from "@/lib";
+import { fakeuserContactLists, fakeuserContacts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = "http://localhost:8081/api/user-system/contacts";
 
+// get contacts by userid
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);
@@ -14,26 +16,29 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: authHeader,
+    //   },
+    // });
 
-    if (!response.ok) {
-      return new NextResponse("Failed to fetch user contacts", {
-        status: response.status,
-      });
-    }
+    // if (!response.ok) {
+    //   return new NextResponse("Failed to fetch user contacts", {
+    //     status: response.status,
+    //   });
+    // }
 
-    const data = await response.json();
+    // const data = await response.json();
+    const listId = fakeuserContactLists.find(lid => lid.userId === userId);
+    const data = fakeuserContacts.filter(c => c.contactListId === listId?.contactListId);
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     return new NextResponse("Error fetch user contacts", { status: 500 });
   }
 }
 
+// Add new contact
 export async function POST(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const body = await req.json();
@@ -58,6 +63,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// update contact
 export async function PUT(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const body = await req.json();
@@ -82,6 +88,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+// delete contact
 export async function DELETE(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);

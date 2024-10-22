@@ -1,9 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
+import { fakeorders } from "@/mockdata";
 
 const API_BASE_URL = "http://localhost:8083/api/order-system/orders";
 
-// get order by orderid/sellerid/userid ... ?
+// get order by orderid/sellerid/userid ... ?   ----  [currently only used get by orderid]
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
 
@@ -28,13 +29,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(apiEndpoint, {
-      method: "GET",
-      headers: {
-        Authorization: authHeader,
-      },
-    });
-    const data = await response.json();
+    // const response = await fetch(apiEndpoint, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: authHeader,
+    //   },
+    // });
+    // const data = await response.json();
+    const data = fakeorders.find((o) => o.orderId === orderid);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

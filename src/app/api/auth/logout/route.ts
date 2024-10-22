@@ -6,12 +6,12 @@ const API_BASE_URL = "http://localhost:8081/api/user-system/auth/logout";
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
-  const res = await fetch(API_BASE_URL, {
-    method: "POST",
-    headers: {
-      Authorization: authHeader,
-    },
-  });
+  // const res = await fetch(API_BASE_URL, {
+  //   method: "POST",
+  //   headers: {
+  //     Authorization: authHeader,
+  //   },
+  // });
 
   const response = NextResponse.json(
     { message: "Logout Success" },

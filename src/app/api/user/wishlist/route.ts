@@ -1,4 +1,5 @@
 import { getTokenFromRequest } from "@/lib";
+import { userinfoList } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = "http://localhost:8081/api/user-system/wish-posts";
@@ -18,23 +19,28 @@ export async function GET(req: NextRequest) {
   // Handle specific wish post compare
   if (postId) {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/compare?userId=${userId}&postId=${postId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: authHeader,
-          },
-        }
+      // const response = await fetch(
+      //   `${API_BASE_URL}/compare?userId=${userId}&postId=${postId}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       Authorization: authHeader,
+      //     },
+      //   }
+      // );
+
+      // if (!response.ok) {
+      //   return new NextResponse("Failed to compare wish post", {
+      //     status: response.status,
+      //   });
+      // }
+
+      // const data = await response.json();
+      const userinfo = userinfoList.find((user) => user.userId === userId);
+      const checkResult = userinfo?.userWishPostList.find(
+        (post) => post.refPost.refPostId === postId
       );
-
-      if (!response.ok) {
-        return new NextResponse("Failed to compare wish post", {
-          status: response.status,
-        });
-      }
-
-      const data = await response.json();
+      const data = checkResult ? "true" : "false";
       return new NextResponse(JSON.stringify(data), { status: 200 });
     } catch (error) {
       return new NextResponse("Error comparing wish post", { status: 500 });
@@ -43,20 +49,22 @@ export async function GET(req: NextRequest) {
 
   // Handle fetching wish posts by userId
   try {
-    const response = await fetch(`${API_BASE_URL}/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: authHeader,
+    //   },
+    // });
 
-    if (!response.ok) {
-      return new NextResponse("Failed to fetch wish posts", {
-        status: response.status,
-      });
-    }
+    // if (!response.ok) {
+    //   return new NextResponse("Failed to fetch wish posts", {
+    //     status: response.status,
+    //   });
+    // }
 
-    const data = await response.json();
+    // const data = await response.json();
+    const oridata = userinfoList.find(uif => uif.userId === userId);
+    const data = oridata?.userWishPostList;
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     return new NextResponse("Error fetching wish posts", { status: 500 });

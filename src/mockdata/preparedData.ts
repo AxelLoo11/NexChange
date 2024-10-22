@@ -139,6 +139,12 @@ export const fakeuserContacts: UserContact[] = [
   contact4,
 ];
 
+export const fakeuserContactLists = [
+  { userId: "testuser-001", contactListId: "testcontactlist-001" },
+  { userId: "testuser-002", contactListId: "testcontactlist-002" },
+  { userId: "testuser-003", contactListId: "testcontactlist-003" },
+];
+
 // fake posts generate functions
 const createFakePost = (
   num: number,
@@ -147,7 +153,7 @@ const createFakePost = (
 ): Post => {
   const imageurls: string[] = [];
   for (let i = 0; i < (num % 4) + 2; i++) {
-    imageurls.push(`${FAKE_IMG_BASE_URL_2}/${num}/200/300`);
+    imageurls.push(`${FAKE_IMG_BASE_URL_2}/${num * 5 + i}/200/300`);
   }
 
   return {
