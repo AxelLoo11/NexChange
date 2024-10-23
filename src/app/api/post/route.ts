@@ -2,7 +2,7 @@ import { fakeposts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 
-const API_BASE_URL = "http://localhost:8082/api/post-system";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system`;
 
 // get all posts | get post by postId
 export async function GET(req: NextRequest) {
@@ -46,19 +46,22 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
+  console.log("[TEST]: the generated authHeader is:", authHeader);
+
   const body = await req.json();
 
-  const res = await fetch(`${API_BASE_URL}/posts/new-post`, {
-    method: "POST",
-    headers: {
-      Authorization: authHeader,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  // const res = await fetch(`${API_BASE_URL}/posts/new-post`, {
+  //   method: "POST",
+  //   headers: {
+  //     Authorization: authHeader,
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(body),
+  // });
 
-  const data = await res.json();
-  return NextResponse.json(data, { status: res.status });
+  // const data = await res.json();
+  // return NextResponse.json(data, { status: res.status });
+  return NextResponse.json(body, { status: 200 });
 }
 
 // need to re-write ...

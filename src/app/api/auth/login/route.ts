@@ -2,7 +2,7 @@ import { fakeuseraccounts } from "@/mockdata";
 import { NextResponse } from "next/server";
 
 const userServiceUrl: string =
-  "http://localhost:8081/api/user-system/auth/login";
+  `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/auth/login`;
 
 function mockCheckAuth(email: string, password: string): string | null {
   const authdata = fakeuseraccounts.find((u) => u.userEmail === email);

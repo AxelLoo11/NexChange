@@ -2,7 +2,7 @@ import { getTokenFromRequest } from "@/lib";
 import { fakeuserContactLists, fakeuserContacts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = "http://localhost:8081/api/user-system/contacts";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/contacts`;
 
 // get contacts by userid
 export async function GET(req: NextRequest) {

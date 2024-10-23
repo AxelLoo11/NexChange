@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-// const API_BASE_URL: string = "http://localhost:8081/api/user-system/users";
+// const API_BASE_URL: string = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/users`;
 
 export async function POST(req: Request) {
   const { email, password, nickname, selectedAvatar } = await req.json();

@@ -2,7 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 
-// const API_BASE_URL = "http://localhost:8081/api/user-system/auth/logout";
+// const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/auth/logout`;
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);

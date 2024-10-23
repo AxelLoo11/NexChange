@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 import { fakeorders } from "@/mockdata";
 
-const API_BASE_URL = "http://localhost:8083/api/order-system/orders";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
 
 // get order by orderid/sellerid/userid ... ?   ----  [currently only used get by orderid]
 export async function GET(req: NextRequest) {

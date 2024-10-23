@@ -2,7 +2,7 @@ import { getTokenFromRequest } from "@/lib";
 import { fakeProfiles } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = "http://localhost:8081/api/user-system/profile";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/profile`;
 
 
 // get profile by id

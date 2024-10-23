@@ -2,7 +2,7 @@ import { getTokenFromRequest } from "@/lib";
 import { userinfoList } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = "http://localhost:8081/api/user-system/wish-posts";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/wish-posts`;
 
 // Get wishpost by userid || determine whether post in wishlist
 export async function GET(req: NextRequest) {

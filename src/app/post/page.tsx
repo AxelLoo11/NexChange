@@ -3,8 +3,12 @@
 import Navigation from '@/components/Navigation';
 import { useUser } from '@/context/UserContext';
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from "uuid"
+
 
 export default function PostProductPage() {
+  const router = useRouter();
   const { user } = useUser();
   const userId = user?.userId || "";
   const username = user?.userNickName || "";
@@ -52,45 +56,25 @@ export default function PostProductPage() {
 
   // upload images to s3 and get the url before create post
   const handleImageUpload = async (files: File[]): Promise<string[] | null> => {
-    // Prepare file data for presigned URL request
-    const fileData = files.map((file) => ({
-      filename: file.name,
-      contentType: file.type,
-    }));
-
-    // Request presigned URLs for all files
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ files: fileData }),
-    });
-
-    const { urls, error } = await res.json();
-    if (error) {
-      setError(error);
-      return null;
-    }
-
     // Upload each file to its presigned URL
-    const uploadPromises = files.map(async (file, idx) => {
-      const { url, fields } = urls[idx];
-      const formData = new FormData();
-      Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value as string);
-      });
-      formData.append('file', file);
+    const uploadPromises = files.map(async (file) => {
+      const fileName = file.name;
+      const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+      const url = `${process.env.NEXT_PUBLIC_S3_URL}/${uuidv4()}${fileExtension}`;
 
       // Upload the file to S3
       const uploadRes = await fetch(url, {
-        method: 'POST',
-        body: formData,
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,  // Ensure the file type is correct
+        },
+        body: file,
       });
 
       if (uploadRes.ok) {
         // Return the full URL of the uploaded image
-        return `${url}/${fields.Key}`;
+        console.log("The image url is: ", url);
+        return url;
       } else {
         throw new Error('Upload failed');
       }
@@ -98,7 +82,7 @@ export default function PostProductPage() {
 
     try {
       const uploadedURLs = await Promise.all(uploadPromises);
-      alert('All images uploaded successfully!');
+      // alert('All images uploaded successfully!');
       return uploadedURLs;
     } catch (uploadError) {
       console.log(uploadError);
@@ -157,8 +141,8 @@ export default function PostProductPage() {
         throw new Error(errorData.message || 'Failed to create the post.');
       }
 
-      alert('Post created successfully!');
-      // need to redirect to explore page ?
+      // alert('Post created successfully!');
+      router.push('/explore');
     } catch (error) {
       console.error(error);
       alert('An error occurred while creating the post. Please try again.');
