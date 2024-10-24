@@ -49,21 +49,21 @@ export async function POST(req: Request) {
   // Set HttpOnly cookie for token and token type
   response.cookies.set("token", token, {
     httpOnly: true, // Makes the cookie HttpOnly
-    secure: true, // Ensures it's sent over HTTPS
+    secure: false, // Ensures it's sent over HTTPS [Set to false just because no certificate QAQ]
     path: "/", // Available across your site
     sameSite: "strict", // Prevents CSRF attacks
   });
 
   response.cookies.set("tokenType", tokenType, {
     httpOnly: true, // Makes the cookie HttpOnly
-    secure: true, // Ensures it's sent over HTTPS
+    secure: false, // Ensures it's sent over HTTPS [Set to false just because no certificate QAQ]
     path: "/", // Available across your site
     sameSite: "strict", // Prevents CSRF attacks
   });
 
   response.cookies.set("userid", userId, {
-    httpOnly: false,
-    secure: true, // Ensures it's sent over HTTPS
+    httpOnly: true,
+    secure: false, // Ensures it's sent over HTTPS [Set to false just because no certificate QAQ]
     path: "/", // Available across your site
     sameSite: "strict", // Prevents CSRF attacks
   });
