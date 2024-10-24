@@ -33,6 +33,8 @@ export type UserPostHistory = {
 };
 
 export type UserOrderHistory = {
+  orderHistoryListId?: string;
+  userId?: string;
   orderHistoryId: string;
   refOrderId: string;
   refOrderTitle: string; // ref order's refPostTitle ?

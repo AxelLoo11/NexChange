@@ -1,29 +1,31 @@
-import { Order } from '@/models';
+import { UserOrderHistory } from '@/models';
 import Link from 'next/link';
 import React from 'react';
 
-export default function OrderCard({ order, pathname }: { order: Order; pathname: string }) {
-    const orderColor: string = "G"; // logical need to be added later ...
+export default function OrderCard({ order, pathname }: { order: UserOrderHistory; pathname: string }) {
+    const orderColor: string = order.refOrderStatus === "UNPAID" ? "R" :
+        order.refOrderStatus === "EXPIRED" ? "B" :
+            order.refOrderStatus === "COMPLETED" || order.refOrderStatus === "RECEIVED" ? "G" : "Y";
 
     return (
         <div className={`flex w-full h-32 border border-gray-200 bg-white my-2 shadow-md`}
         >
             <img
-                src={order.refPost.refPostShortcutURL}
+                src={order.refOrderShortcutURL}
                 alt="Order Shortcut"
                 className='w-32 h-32 rounded-sm flex-none p-2'
             />
 
             <div className='flex flex-auto flex-col p-2'>
                 <Link
-                    href={`${pathname}/${order.orderId}`}
+                    href={`${pathname}/${order.refOrderId}`}
                     className='w-full text-yellow-700 hover:text-yellow-900 font-bold text-lg hover:underline'
                 >
-                    {order.refPost.refPostTitle}
+                    {order.refOrderTitle}
                 </Link>
 
                 <div className='w-full font-light'>
-                    <p>Price: ${order.refPost.refPostPrice}</p>
+                    <p>Price: ${order.refOrderPrice}</p>
                 </div>
 
                 <div className='w-full font-bold'>
@@ -34,7 +36,7 @@ export default function OrderCard({ order, pathname }: { order: Order; pathname:
                                 orderColor === 'Y' ? 'text-yellow-500' :
                                     orderColor === 'B' ? 'text-gray-500' : ''
                     }>
-                        {order.orderStatus}
+                        {order.refOrderStatus}
                     </span>
                 </div>
             </div>
@@ -46,9 +48,12 @@ export default function OrderCard({ order, pathname }: { order: Order; pathname:
                             orderColor === 'B' ? 'to-gray-300' : 'to-gray-100'
                 }`}
             >
-                <span className='h-full w-full flex justify-end items-center text-gray-400 px-4 text-lg'>
+                <Link
+                    href={`${pathname}/${order.refOrderId}`}
+                    className='h-full w-full flex justify-end items-center text-gray-400 px-4 text-lg'
+                >
                     &#11208;
-                </span>
+                </Link>
             </div>
         </div>
     )

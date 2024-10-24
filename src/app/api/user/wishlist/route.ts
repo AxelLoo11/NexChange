@@ -4,9 +4,45 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/wish-posts`;
 
+function fakeGetData(userId: string): any {
+  const oridata = userinfoList.find((uif) => uif.userId === userId);
+  const rawdata = oridata?.userWishPostList;
+
+  if (rawdata) {
+    const wishPostListId = `testwishpostlist-${userId}`;
+    const listdata = rawdata.map((wish) => {
+      return {
+        wishPostId: wish.wishPostId,
+        refPostId: wish.refPost.refPostId,
+        refPostPrice: wish.refPost.refPostPrice,
+        refPostShortcutURL: wish.refPost.refPostShortcutURL,
+        refPostStatus: wish.refPost.refPostStatus,
+        refPostTitle: wish.refPost.refPostTitle,
+      };
+    });
+
+    return {
+      wishPostListId: wishPostListId,
+      userId: userId,
+      wishPosts: listdata,
+    };
+  }
+
+  return null;
+}
+
+function fakeGetCompare(userId: string, postId: string): boolean {
+  const userinfo = userinfoList.find((user) => user.userId === userId);
+  const checkResult = userinfo?.userWishPostList.find(
+    (post) => post.refPost.refPostId === postId
+  );
+  return checkResult ? true : false;
+}
+
 // Get wishpost by userid || determine whether post in wishlist
 export async function GET(req: NextRequest) {
-  // const authHeader = await getTokenFromRequest(req);
+  const authHeader = await getTokenFromRequest(req);
+  console.log("[TEST]: authheader: ", authHeader);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -36,11 +72,9 @@ export async function GET(req: NextRequest) {
       // }
 
       // const data = await response.json();
-      const userinfo = userinfoList.find((user) => user.userId === userId);
-      const checkResult = userinfo?.userWishPostList.find(
-        (post) => post.refPost.refPostId === postId
-      );
-      const data = checkResult ? "true" : "false";
+
+      const data = fakeGetCompare(userId, postId);
+
       return new NextResponse(JSON.stringify(data), { status: 200 });
     } catch (error) {
       console.log(error);
@@ -64,8 +98,9 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const oridata = userinfoList.find((uif) => uif.userId === userId);
-    const data = oridata?.userWishPostList;
+
+    const data = fakeGetData(userId);
+
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.log(error);
@@ -73,7 +108,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// add new post to wishpost list ( how to get the wishlist id ????? )
+// add new post to wishpost list
 export async function POST(request: NextRequest) {
   const authHeader = await getTokenFromRequest(request);
   const body = await request.json(); // Get the request body
@@ -106,18 +141,18 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const authHeader = await getTokenFromRequest(request);
   const { searchParams } = new URL(request.url);
-  const wishPostId = searchParams.get("wishPostId");
-  const wishPostListId = searchParams.get("wishPostListId");
+  const userId = searchParams.get("userId");
+  const refPostId = searchParams.get("refPostId");
 
-  if (!wishPostId || !wishPostListId) {
-    return new NextResponse("Missing wishPostId or wishPostListId", {
+  if (!userId || !refPostId) {
+    return new NextResponse("Missing userId or refPostId", {
       status: 400,
     });
   }
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}?wishPostId=${wishPostId}&wishPostListId=${wishPostListId}`,
+      `${API_BASE_URL}?userId=${userId}&refPostId=${refPostId}`,
       {
         method: "DELETE",
         headers: {

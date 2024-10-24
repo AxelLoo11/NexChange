@@ -4,9 +4,41 @@ import Image from 'next/image';
 import TabGallary from '@/components/TabGallary';
 import LogoutButton from '@/components/LogoutBtn';
 import { cookies } from 'next/headers';
-import { UserDetailInfo, UserPostHistory, UserWishPost } from '@/models';
+import { RefPost, UserWishPost } from '@/models';
 
-async function fetchUserWishList(userId: string, authHeader: string): Promise<UserWishPost[]> {
+interface PostHitory {
+  postHistoryListId: string;
+  userId: string;
+  postHistoryId: string;
+  refPostId: string;
+  refPostTitle: string;
+  refPostShortcutURL: string;
+  refPostStatus: string;
+  refPostPrice: number;
+}
+
+interface UserPostHistoryList {
+  postHistoryListId: string;
+  userId: string;
+  postHistories: PostHitory[];
+}
+
+interface WishPost {
+  wishPostId: string;
+  refPostId: string;
+  refPostPrice: number;
+  refPostShortcutURL: string;
+  refPostStatus: string;
+  refPostTitle: string;
+}
+
+interface UserWishPostList {
+  wishPostListId: string;
+  userId: string;
+  wishPosts: WishPost[];
+}
+
+async function fetchUserWishList(userId: string, authHeader: string): Promise<UserWishPostList> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/wishlist?userid=${userId}`, {
     method: 'GET',
     headers: {
@@ -26,7 +58,7 @@ async function fetchUserWishList(userId: string, authHeader: string): Promise<Us
   return data;
 }
 
-async function fetchUserPostHistory(userId: string, authHeader: string): Promise<UserPostHistory[]> {
+async function fetchUserPostHistory(userId: string, authHeader: string): Promise<UserPostHistoryList> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/posthistory?userid=${userId}`, {
     method: 'GET',
     headers: {
@@ -54,20 +86,33 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
   const authHeader: string = `${tokenType}${token}`;
 
   const userProfile = JSON.parse(decodeURIComponent(cookieStore.get('userData')?.value || ""));
-  const userwishposts: UserWishPost[] = await fetchUserWishList(userId, authHeader);
-  const userposthistorys: UserPostHistory[] = await fetchUserPostHistory(userId, authHeader);
+  const userwishposts: UserWishPostList = await fetchUserWishList(userId, authHeader);
+  const userposthistorys: UserPostHistoryList = await fetchUserPostHistory(userId, authHeader);
 
   const isReadOnly: boolean = params.userid === userId ? false : true;
 
-  const fetchedUserInfo: UserDetailInfo = {
-    userId: params.userid,
-    userProfile: userProfile,
-    userWishPostList: userwishposts,
-    userPostHistoryList: userposthistorys
-  };
+  const userWishPostList: RefPost[] = userwishposts.wishPosts.map((post) => {
+    return {
+      refPostId: post.refPostId,
+      refPostTitle: post.refPostTitle,
+      refPostShortcutURL: post.refPostShortcutURL,
+      refPostPrice: post.refPostPrice,
+      refPostStatus: post.refPostStatus,
+    }
+  });
+  const userPostHistoryList: RefPost[] = userposthistorys.postHistories.map((post) => {
+    return {
+      refPostId: post.refPostId,
+      refPostTitle: post.refPostTitle,
+      refPostShortcutURL: post.refPostShortcutURL,
+      refPostPrice: post.refPostPrice,
+      refPostStatus: post.refPostStatus,
+    }
+  });
+
   const tabs = [
-    { tabName: 'Wish List', tabValue: fetchedUserInfo.userWishPostList.map(item => item.refPost) },
-    { tabName: 'Post History', tabValue: fetchedUserInfo.userPostHistoryList.map(item => item.refPost) },
+    { tabName: 'Wish List', tabValue: userWishPostList },
+    { tabName: 'Post History', tabValue: userPostHistoryList },
   ];
 
   return (
@@ -82,14 +127,14 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
           <div className="flex items-center w-full">
             {/* User Profile Image */}
             <Image
-              src={`/images/${fetchedUserInfo.userProfile.userAvatarURL}`}
-              alt={`${fetchedUserInfo.userProfile.userNickName}'s profile picture`}
+              src={`/images/${userProfile.userAvatarURL}`}
+              alt={`${userProfile.userNickName}'s profile picture`}
               className="rounded-full flex-none"
               width={80}
               height={80}
             />
             <div className="ml-4 flex-auto">
-              <h2 className="text-xl font-bold">{fetchedUserInfo.userProfile.userNickName}</h2>
+              <h2 className="text-xl font-bold">{userProfile.userNickName}</h2>
             </div>
             {!isReadOnly && (
               <div className='flex-none'>

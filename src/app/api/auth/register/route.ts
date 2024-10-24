@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   //     userEmail: email,
   //     userPassword: password,
   //     userName: nickname,
-  //     userAvatarURL: selectedAvatar,
+  //     avatarURL: selectedAvatar,
   //   }),
   // });
 

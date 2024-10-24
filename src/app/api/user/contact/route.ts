@@ -4,9 +4,23 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/contacts`;
 
+function fakeGetData(userId: string): any {
+  const listId = fakeuserContactLists.find((lid) => lid.userId === userId);
+  const rawdata = fakeuserContacts.filter(
+    (c) => c.contactListId === listId?.contactListId
+  );
+  const data = {
+    contactListId: listId,
+    userId: userId,
+    userContacts: rawdata,
+  };
+  return data;
+}
+
 // get contacts by userid
 export async function GET(req: NextRequest) {
-  // const authHeader = await getTokenFromRequest(req);
+  const authHeader = await getTokenFromRequest(req);
+  console.log("[TEST] AuthHeader: ", authHeader);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -30,10 +44,9 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const listId = fakeuserContactLists.find((lid) => lid.userId === userId);
-    const data = fakeuserContacts.filter(
-      (c) => c.contactListId === listId?.contactListId
-    );
+
+    const data = fakeGetData(userId);
+
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.log(error);
@@ -57,7 +70,7 @@ export async function POST(req: NextRequest) {
     });
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data); // return the new created contact object ...
   } catch (error) {
     console.log(error);
     return NextResponse.json(

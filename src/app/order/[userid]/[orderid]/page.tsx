@@ -1,36 +1,61 @@
 "use client";
 
 import Navigation from '@/components/Navigation';
-import { Order } from '@/models';
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface OrderDetail {
+  orderId: string;
+  refPostId: string;
+  refPostTitle: string;
+  refPostShortcutURL: string;
+  refPostPrice: number;
+  orderStatus: string;
+  sellerDetail: {
+    sellerId: string;
+    refUserId: string;
+    sellerName: string;
+    sellerAvatarURL: string;
+  },
+  buyerDetail: {
+    buyerId: string;
+    refUserId: string;
+    buyerName: string;
+    buyerAddress: string;
+    buyerPostalCode: string;
+    buyerContactNumber: string;
+  },
+  userId: string;
+  createdAt: Date;
+}
 
 export default function OrderDetailPage({ params }: { params: { userid: string; orderid: string } }) {
-  const [order, setOrder] = useState<Order>({
-    orderId: "defaultorder",
-    refBuyer: {
-      userProfile: {
-        userId: 'loading ...',
-        userAvatarURL: '01.jpg',
-        userNickName: 'loading ...',
-      }
+  const router = useRouter();
+  const [order, setOrder] = useState<OrderDetail>({
+    orderId: "",
+    refPostId: "",
+    refPostTitle: "Loading ...",
+    refPostShortcutURL: "https://via.placeholder.com/300",
+    refPostPrice: 0,
+    orderStatus: "Loading ...",
+    sellerDetail: {
+      sellerId: "",
+      refUserId: "",
+      sellerName: "Loading ...",
+      sellerAvatarURL: "01.jpg",
     },
-    refSeller: {
-      userProfile: {
-        userId: 'loading ...',
-        userAvatarURL: '01.jpg',
-        userNickName: 'loading ...'
-      }
+    buyerDetail: {
+      buyerId: "",
+      refUserId: "",
+      buyerName: "Loading ...",
+      buyerAddress: "Loading ...",
+      buyerPostalCode: "Loading ...",
+      buyerContactNumber: "Loading ...",
     },
-    refPost: {
-      refPostId: 'loading ...',
-      refPostTitle: 'loading ...',
-      refPostShortcutURL: 'https://avatar.iran.liara.run/public',
-      refPostPrice: 0
-    },
-    createdAt: new Date(2024, 9, 8, 10, 0),
-    orderStatus: "",
+    userId: "",
+    createdAt: new Date(),
   });
 
   useEffect(() => {
@@ -66,19 +91,46 @@ export default function OrderDetailPage({ params }: { params: { userid: string; 
     };
   }, []);
 
-  const handleCancel = () => {
-    if (order?.orderStatus === "UNPAID") {
-      console.log("Cancel Order ", order.orderId);
+  const handleCancel = async () => {
+    if (order.orderStatus === "UNPAID") {
+      try {
+        const res = await fetch(`/api/order?orderId=${params.orderid}`, {
+          method: "DELETE",
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          throw new Error('Failed to cancel order');
+        }
+        alert("Cancel Success!");
+
+        router.push(`/order/${params.userid}`);
+      } catch (error) {
+        alert(error);
+        console.error('Error cancel order:', error);
+      }
     }
     else {
       console.log("Error Cancel Logic!");
     }
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (order.orderStatus === "UNPAID") {
-      // send status change api request ...
-      console.log("Pay Order ", order.orderId);
+      try {
+        const res = await fetch(`/api/payment?orderId=${params.orderid}`, {
+          method: "GET",
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          throw new Error('Failed to fetch order details');
+        }
+        alert("Pay Success!");
+
+        router.push(`/order/${params.userid}`);
+      } catch (error) {
+        alert(error);
+        console.error('Error pay order:', error);
+      }
     }
     else {
       console.log("Error Payment Logic!");
@@ -99,20 +151,20 @@ export default function OrderDetailPage({ params }: { params: { userid: string; 
         <h1 className="text-2xl font-bold my-4">Order Detail</h1>
 
         <div className="bg-white shadow-md rounded-lg p-4 mb-4 flex">
-          <img src={order.refPost.refPostShortcutURL} alt={order.refPost.refPostTitle} className="w-32 h-32 object-cover rounded-lg mr-6" />
+          <img src={order.refPostShortcutURL} alt={order.refPostTitle} className="w-32 h-32 object-cover rounded-lg mr-6" />
           <div className="flex flex-1 flex-col">
-            <p className="mb-2 flex-1"><strong>Title:</strong> {order.refPost.refPostTitle}</p>
-            <p className="mb-2 flex-1"><strong>Price:</strong> ${order.refPost.refPostPrice.toFixed(2)}</p>
+            <p className="mb-2 flex-1"><strong>Title:</strong> {order.refPostTitle}</p>
+            <p className="mb-2 flex-1"><strong>Price:</strong> ${order.refPostPrice.toFixed(2)}</p>
             <div className='w-full flex mb-2 flex-1'>
               <p><strong>Seller:</strong></p>
               <Image
-                src={`/images/${order.refSeller.userProfile.userAvatarURL}`}
+                src={`/images/${order.sellerDetail.sellerAvatarURL}`}
                 alt="Owner Avatar"
                 className="p-1 rounded-full"
                 width={40}
                 height={40}
               />
-              <p>{order.refSeller.userProfile.userNickName}</p>
+              <p>{order.sellerDetail.sellerName}</p>
             </div>
             <p className="mb-2 flex-1"><strong>Status:</strong> {order.orderStatus}</p>
           </div>
@@ -120,10 +172,10 @@ export default function OrderDetailPage({ params }: { params: { userid: string; 
 
         <div className="bg-gray-100 p-4 rounded-lg">
           <h2 className="text-lg font-semibold mb-2">Order Address Info</h2>
-          <p className="mb-1"><strong>Name:</strong> {order.refBuyer.userProfile.userNickName}</p>
-          <p className="mb-1"><strong>Address:</strong> {order.refBuyer.userContact?.contactAddress}</p>
-          <p className="mb-1"><strong>Postal Code:</strong> {order.refBuyer.userContact?.postalCode}</p>
-          <p className="mb-1"><strong>Contact Number:</strong> {order.refBuyer.userContact?.contactNumber}</p>
+          <p className="mb-1"><strong>Name:</strong> {order.buyerDetail.buyerName}</p>
+          <p className="mb-1"><strong>Address:</strong> {order.buyerDetail.buyerAddress}</p>
+          <p className="mb-1"><strong>Postal Code:</strong> {order.buyerDetail.buyerPostalCode}</p>
+          <p className="mb-1"><strong>Contact Number:</strong> {order.buyerDetail.buyerContactNumber}</p>
         </div>
 
         <div className="flex justify-between my-4">

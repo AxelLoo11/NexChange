@@ -13,7 +13,7 @@ const RefPostCard = ({ post }: { post: RefPost }) => {
                 />
                 <div className="p-4">
                     <h2 className="font-bold text-md mb-2">{post.refPostTitle}</h2>
-                    <p className="text-sm text-gray-600 justify-end">{post.refPostPrice}</p>
+                    <p className="text-sm text-gray-600 justify-end">$ {post.refPostPrice}</p>
                 </div>
             </div>
         </Link>

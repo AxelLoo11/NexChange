@@ -8,8 +8,8 @@ const FeedCard = ({ post }: { post: Post }) => {
         <Link href={`/explore/${post.postId}`} className="hover:shadow-lg">
             <div className="bg-white shadow rounded overflow-hidden">
                 <div className="flex items-center w-full px-1">
-                    <Image 
-                        src={`/images/${post.postSeller.sellerAvatarURL}`} 
+                    <Image
+                        src={`/images/${post.postSeller.sellerAvatarURL}`}
                         alt="Owner Avatar"
                         className="p-1 rounded-full"
                         width={40}
@@ -25,7 +25,7 @@ const FeedCard = ({ post }: { post: Post }) => {
                 <div className="p-4">
                     <h2 className="font-bold text-md mb-2">{post.postTitle}</h2>
                     <p className="text-sm text-gray-600">{post.postName}</p>
-                    <p className="w-full flex text-md text-gray-600 justify-end">{post.postPrice}</p>
+                    <p className="w-full flex text-md text-gray-600 justify-end">$ {post.postPrice}</p>
                 </div>
             </div>
         </Link>

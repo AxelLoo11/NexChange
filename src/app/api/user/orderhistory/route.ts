@@ -4,8 +4,33 @@ import { NextRequest, NextResponse } from "next/server";
 // needed?
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/order-histories`;
 
+function fakeGetData(userId: string): any {
+  const rawdata = fakeorders.filter(
+    (oh) => oh.refBuyer.userProfile.userId === userId
+  );
+  const listdata = rawdata.map((order) => {
+    return {
+      orderHistoryListId: `orderhistorylist-${userId}`,
+      userId: userId,
+      orderHistoryId: `orderhistory-${userId}`,
+      refOrderId: order.orderId,
+      refOrderTitle: order.refPost.refPostTitle,
+      refOrderShortcutURL: order.refPost.refPostShortcutURL,
+      refOrderPrice: order.refPost.refPostPrice,
+      refOrderStatus: order.orderStatus,
+    };
+  });
+
+  return {
+    orderHistoryListId: `orderhistorylist-${userId}`,
+    userId: userId,
+    userOrderHistories: listdata,
+  };
+}
+
 export async function GET(req: NextRequest) {
-  // const authHeader = await getTokenFromRequest(req);
+  const authHeader = await getTokenFromRequest(req);
+  console.log("[TEST] Authheader: ", authHeader);
   const { searchParams } = new URL(req.url);
 
   const userId = searchParams.get("userid");
@@ -29,9 +54,9 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await response.json();
-    const data = fakeorders.filter(
-      (oh) => oh.refBuyer.userProfile.userId === userId
-    );
+
+    const data = fakeGetData(userId);
+
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.log(error);
@@ -39,6 +64,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// needed? do not know where to put this method ...
 export async function DELETE(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const { searchParams } = new URL(req.url);

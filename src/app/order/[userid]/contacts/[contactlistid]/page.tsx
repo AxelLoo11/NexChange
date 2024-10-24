@@ -3,9 +3,10 @@
 import CreateContactModal from '@/components/ContactModal';
 import Navigation from '@/components/Navigation';
 import { UserContact } from '@/models';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-export default function UserContactsListPage({ params }: { params: { userid: string } }) {
+export default function UserContactsListPage({ params }: { params: { userid: string; contactlistid: string } }) {
   const [contacts, setContacts] = useState<UserContact[]>([]); // should be fetched from api ...
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<UserContact | null>(null);
@@ -28,7 +29,7 @@ export default function UserContactsListPage({ params }: { params: { userid: str
 
         // Only update state if the component is still mounted
         if (isMounted) {
-          setContacts(data);
+          setContacts(data.userContacts);
         }
       } catch (error) {
         console.error('Error fetching contacts:', error);
@@ -43,18 +44,42 @@ export default function UserContactsListPage({ params }: { params: { userid: str
     };
   }, []);
 
-  const handleSetDefault = (contactId: string) => {
+  const handleSetDefault = async (contactId: string) => {
+    const updateContact = contacts.filter((ct) => ct.contactId === contactId);
+    const oridefaultContact = contacts.filter((ct) => ct.defaultContact === true);
+
+    const newdefaultres = await fetch(`/api/user/contact`, {
+      method: 'PUT',
+      cache: 'no-store',
+      credentials: 'include',
+      body: JSON.stringify({ ...updateContact, defaultContact: true })
+    });
+    if (!newdefaultres.ok) {
+      alert("Update default contact failed ...");
+      return;
+    }
+
+    const oridefaultres = await fetch(`/api/user/contact`, {
+      method: 'PUT',
+      cache: 'no-store',
+      credentials: 'include',
+      body: JSON.stringify({ ...oridefaultContact, defaultContact: false })
+    });
+    if (!oridefaultres.ok) {
+      alert("Update default contact failed ... ...");
+      return;
+    }
+
     setContacts((prevContacts) =>
       prevContacts.map((contact) =>
         contact.contactId === contactId
-          ? { ...contact, isDefault: true }
-          : { ...contact, isDefault: false }
+          ? { ...contact, defaultContact: true }
+          : { ...contact, defaultContact: false }
       )
     );
   };
 
   const handleEdit = (contactId: string) => {
-    // fetch api ...
     const contactToEdit = contacts.find((contact) => contact.contactId === contactId);
     if (contactToEdit) {
       setEditingContact(contactToEdit);
@@ -62,15 +87,36 @@ export default function UserContactsListPage({ params }: { params: { userid: str
     }
   };
 
-  const handleDelete = (contactId: string) => {
-    // fetch api ...
+  const handleDelete = async (contactId: string) => {
+    const res = await fetch(`/api/user/contact?contactListId=${params.contactlistid}&contactId=${contactId}`, {
+      method: 'DELETE',
+      cache: 'no-store',
+      credentials: 'include',
+    });
+
+    if (!res.ok) {
+      alert("Delete Contact failed ...");
+      return;
+    }
+
     setContacts((prevContacts) =>
       prevContacts.filter((contact) => contact.contactId !== contactId)
     );
   };
 
-  const handleSaveContact = (updatedContact: UserContact) => {
-    // fetch api ...
+  const handleSaveContact = async (updatedContact: UserContact) => {
+    const res = await fetch("/api/user/contact", {
+      method: 'PUT',
+      cache: 'no-store',
+      credentials: 'include',
+      body: JSON.stringify(updatedContact)
+    });
+
+    if (!res.ok) {
+      alert("Update contact failed ...");
+      return;
+    }
+
     setContacts((prevContacts) =>
       prevContacts.map((contact) =>
         contact.contactId === updatedContact.contactId ? updatedContact : contact
@@ -80,9 +126,31 @@ export default function UserContactsListPage({ params }: { params: { userid: str
     setEditingContact(null);
   };
 
-  const handleCreateContact = (newContact: UserContact) => {
-    // fetch api ...
-    setContacts((prevContacts) => [...prevContacts, newContact]);
+  const handleCreateContact = async (newContact: UserContact) => {
+    const body = JSON.stringify({
+      contactListId: newContact.contactListId,
+      contactName: newContact.contactName,
+      contactAddress: newContact.contactAddress,
+      postalCode: newContact.postalCode,
+      contactNumber: newContact.contactNumber,
+      defaultContact: newContact.defaultContact,
+    });
+
+    const res = await fetch("/api/user/contact", {
+      method: 'POST',
+      cache: 'no-store',
+      credentials: 'include',
+      body: body
+    });
+
+    if (!res.ok) {
+      alert("Add new contact failed ...");
+      return;
+    }
+
+    const data = await res.json();
+
+    setContacts((prevContacts) => [...prevContacts, data]);
     setIsModalOpen(false);
   };
 
@@ -93,6 +161,9 @@ export default function UserContactsListPage({ params }: { params: { userid: str
       </div>
 
       <div className="flex flex-col p-4 bg-gray-50 overflow-auto w-full lg:w-[calc(100vw-10rem)]">
+        <Link href={`/order/${params.userid}`} className='w-full bg-yellow-400 rounded-lg hover:bg-yellow-600 p-4 text-white font-bold'>
+          &#11207; Return
+        </Link>
         <h2 className="text-2xl font-bold mb-6">Select Default Contact</h2>
 
         {contacts.map((contact) => (
@@ -150,6 +221,7 @@ export default function UserContactsListPage({ params }: { params: { userid: str
               setEditingContact(null);
             }}
             contact={editingContact || undefined} // Pass the contact if editing
+            contactListId={params.contactlistid}
           />
         )}
       </div>

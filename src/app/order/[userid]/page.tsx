@@ -1,11 +1,23 @@
 import Navigation from '@/components/Navigation'
 import OrderList from '@/components/OrderList';
-import { Order, UserContact } from '@/models';
+import { Order, UserContact, UserOrderHistory } from '@/models';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';
 
-async function fetchUserContacts(userid: string, authHeader: string): Promise<UserContact[]> {
+interface UserContactList {
+  contactListId: string;
+  userId: string;
+  userContacts: UserContact[];
+}
+
+interface UserOrderHistoryList {
+  orderHistoryListId: string;
+  userId: string;
+  userOrderHistories: UserOrderHistory[];
+}
+
+async function fetchUserContacts(userid: string, authHeader: string): Promise<UserContactList> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/contact?userid=${userid}`, {
     method: 'GET',
     headers: {
@@ -24,7 +36,7 @@ async function fetchUserContacts(userid: string, authHeader: string): Promise<Us
   return data;
 }
 
-async function fetchUserOrders(userid: string, authHeader: string): Promise<Order[]> {
+async function fetchUserOrders(userid: string, authHeader: string): Promise<UserOrderHistoryList> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/orderhistory?userid=${userid}`, {
     method: 'GET',
     headers: {
@@ -50,10 +62,10 @@ export default async function OrderHistoryPage({ params }: { params: { userid: s
   const tokenType = cookieStore.get('tokenType')?.value || "";
   const authHeader: string = `${tokenType}${token}`;
 
-  const contactList: UserContact[] = await fetchUserContacts(userId, authHeader);
-  const defaultContact: UserContact = contactList.find(contact => contact.defaultContact) as UserContact;
+  const contactList: UserContactList = await fetchUserContacts(userId, authHeader);
+  const defaultContact: UserContact = contactList.userContacts.find(contact => contact.defaultContact) as UserContact;
 
-  const orderList: Order[] = await fetchUserOrders(userId, authHeader);
+  const orderList: UserOrderHistoryList = await fetchUserOrders(userId, authHeader);
 
   return (
     <div className="bg-gray-100 min-h-[calc(100vh-5rem)] lg:flex w-full">
@@ -73,7 +85,7 @@ export default async function OrderHistoryPage({ params }: { params: { userid: s
             </div>
             <div className='flex-none h-full flex justify-center items-center'>
               <Link
-                href={`/order/${params.userid}/contacts`}
+                href={`/order/${params.userid}/contacts/${contactList.contactListId}`}
                 className='h-full w-full flex justify-center items-center text-gray-500 px-2'
               >
                 Select &#11208; {/* Right Arrow */}
@@ -83,7 +95,7 @@ export default async function OrderHistoryPage({ params }: { params: { userid: s
         </div>
         {/* Order History Container */}
         <div className='w-full flex-auto p-4'>
-          <OrderList orders={orderList} pathname={`/order/${params.userid}`} />
+          <OrderList orders={orderList.userOrderHistories} pathname={`/order/${params.userid}`} />
         </div>
       </div>
     </div>

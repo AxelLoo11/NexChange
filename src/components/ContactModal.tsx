@@ -8,11 +8,13 @@ interface CreateContactModalProps {
     onCreate: (contact: UserContact) => void;
     onClose: () => void;
     contact?: UserContact; // Optional for editing
+    contactListId?: string;
 }
 
-const CreateContactModal = ({ onCreate, onClose, contact }: CreateContactModalProps) => {
+const CreateContactModal = ({ onCreate, onClose, contact, contactListId }: CreateContactModalProps) => {
     const [newContact, setNewContact] = useState<UserContact>({
         contactId: uuidv4() as string,
+        contactListId: contactListId,
         contactName: "",
         contactNumber: "",
         contactAddress: "",
