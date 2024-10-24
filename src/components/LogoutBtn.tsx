@@ -3,9 +3,11 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
 const LogoutButton: React.FC = () => {
   const router = useRouter();
+  const { setUser } = useUser()
 
   const handleLogout = async () => {
     // Call the logout API to clear cookies
@@ -13,6 +15,8 @@ const LogoutButton: React.FC = () => {
       method: 'GET',
       credentials: 'include', // Include cookies in the request if necessary
     });
+
+    setUser(null);
 
     // Redirect to the home page
     router.push('/');

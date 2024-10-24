@@ -4,30 +4,34 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/profile`;
 
-
 // get profile by id
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userid");
-  const authHeader = await getTokenFromRequest(req);
-  console.log(authHeader);
 
-  // const res = await fetch(`${API_BASE_URL}/${userId}`, {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: authHeader,
-  //   },
-  // });
+  try {
+    const authHeader = await getTokenFromRequest(req);
+    console.log(authHeader);
+    // const res = await fetch(`${API_BASE_URL}/${userId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: authHeader,
+    //   },
+    // });
 
-  // if (!res.ok) {
-  //   return NextResponse.error();
-  // }
+    // if (!res.ok) {
+    //   return NextResponse.error();
+    // }
 
-  // const data = await res.json();
+    // const data = await res.json();
 
-  const data = fakeProfiles.find((p) => p.userId === userId);
+    const data = fakeProfiles.find((p) => p.userId === userId);
+    console.log("The fetched profile is: ", data);
 
-  return NextResponse.json(data);
+    return NextResponse.json(data, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(error, { status: 400 });
+  }
 }
 
 // update profile by id
