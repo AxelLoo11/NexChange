@@ -3,7 +3,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 import { fakeorders } from "@/mockdata";
-import orderTimerStore from "@/lib/orderTimer";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
 
@@ -105,20 +104,7 @@ export async function POST(req: NextRequest) {
     const data = await res.json();
     const { orderId } = data;
 
-    // Set a timer to expire the order after 15 minutes
-    const timer = setTimeout(async () => {
-      await fetch(`${API_BASE_URL}/expire?orderId=${orderId}`, {
-        method: "POST",
-      });
-    }, 15 * 60 * 1000); // 15 minutes
-
-    // Store the timer in the shared store
-    orderTimerStore.setTimer(orderId, timer);
-
-    return NextResponse.json(
-      { message: "Create New order Success ..." },
-      { status: 200 }
-    );
+    return NextResponse.json(orderId, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -151,7 +137,6 @@ export async function DELETE(req: NextRequest) {
     });
 
     if (response.ok) {
-      orderTimerStore.clearTimer(orderId);
       return NextResponse.json({ message: "Order cancelled successfully" });
     } else {
       return NextResponse.json(

@@ -2,7 +2,26 @@ import { fakeposts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system/posts`;
+
+function fakeGetData(postId: string): any {
+  const postdetail = fakeposts.find((p) => p.postId === postId);
+  const postimages = postdetail?.postImages;
+
+  if (postimages) {
+    const imagelist = postimages.map((img) => {
+      return {
+        postImageId: `testimage-${postId}`,
+        postImageURL: img,
+        postId: postId,
+      };
+    });
+
+    return { ...postdetail, postImages: imagelist };
+  }
+
+  return null;
+}
 
 // get all posts | get post by postId
 export async function GET(req: NextRequest) {
@@ -12,7 +31,7 @@ export async function GET(req: NextRequest) {
   console.log("[TEST]: the generated authHeader is:", authHeader);
 
   if (postId) {
-    // const res = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    // const res = await fetch(`${API_BASE_URL}/${postId}`, {
     //   method: "GET",
     //   headers: {
     //     Authorization: authHeader,
@@ -24,10 +43,10 @@ export async function GET(req: NextRequest) {
     // }
 
     // const data = await res.json();
-    const data = fakeposts.find((p) => p.postId === postId);
+    const data = fakeGetData(postId);
     return NextResponse.json(data, { status: 200 });
   } else {
-    // const res = await fetch(`${API_BASE_URL}/posts`, {
+    // const res = await fetch(`${API_BASE_URL}`, {
     //   method: "GET",
     //   headers: {
     //     Authorization: authHeader,
@@ -44,13 +63,14 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// Publish new post ...
 export async function POST(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   console.log("[TEST]: the generated authHeader is:", authHeader);
 
   const body = await req.json();
 
-  // const res = await fetch(`${API_BASE_URL}/posts/new-post`, {
+  // const res = await fetch(`${API_BASE_URL}/new-post`, {
   //   method: "POST",
   //   headers: {
   //     Authorization: authHeader,
@@ -59,25 +79,24 @@ export async function POST(req: NextRequest) {
   //   body: JSON.stringify(body),
   // });
 
+  // if (!res.ok) {
+  //   return NextResponse.json(
+  //     { error: "Failed to publish new post" },
+  //     { status: 500 }
+  //   );
+  // }
+
   // const data = await res.json();
   // return NextResponse.json(data, { status: res.status });
   return NextResponse.json(body, { status: 200 });
 }
 
-// need to re-write ...
+// update post info (images not included ...)
 export async function PUT(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   const body = await req.json();
-  const action = req.nextUrl.searchParams.get("action") || "update";
 
-  const updateURL =
-    action === "addImage"
-      ? `${API_BASE_URL}/posts/update/addImage`
-      : action === "deleteImage"
-      ? `${API_BASE_URL}/posts/update/deleteImage`
-      : `${API_BASE_URL}/posts/update`;
-
-  const res = await fetch(updateURL, {
+  const res = await fetch(`${API_BASE_URL}/update`, {
     method: "PUT",
     headers: {
       Authorization: authHeader,
@@ -86,19 +105,29 @@ export async function PUT(req: NextRequest) {
     body: JSON.stringify(body),
   });
 
+  if (!res.ok) {
+    return NextResponse.json(
+      { error: "Failed to update post info" },
+      { status: 500 }
+    );
+  }
+
   const data = await res.json();
   return NextResponse.json(data, { status: res.status });
 }
 
+// delete post ...
 export async function DELETE(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
-  const postId = req.nextUrl.searchParams.get("postId");
+
+  const { searchParams } = new URL(req.url);
+  const postId = searchParams.get("postid");
 
   if (!postId) {
     return NextResponse.json({ error: "PostId is required" }, { status: 400 });
   }
 
-  const res = await fetch(`${API_BASE_URL}/posts/delete?postId=${postId}`, {
+  const res = await fetch(`${API_BASE_URL}/delete?postId=${postId}`, {
     method: "DELETE",
     headers: {
       Authorization: authHeader,

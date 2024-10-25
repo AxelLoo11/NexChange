@@ -2,7 +2,6 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
-import orderTimerStore from "@/lib/orderTimer";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
 
@@ -30,9 +29,6 @@ export async function GET(req: NextRequest) {
   );
 
   if (confirmResponse.ok) {
-    // Clear the expiration timer
-    orderTimerStore.clearTimer(orderId);
-
     return NextResponse.json({ message: "Order confirmed" }, { status: 200 });
   }
 
