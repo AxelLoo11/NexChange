@@ -1,25 +1,106 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import ImageCarousel from './ImageCarousel';
 import Image from 'next/image';
 import { Post } from '@/models';
+import WishBtn from './WishBtn';
+import { useRouter } from 'next/navigation';
 
 export default function PostDetail(
-    { post, readOnly, isOwner }: { post: Post; readOnly?: boolean; isOwner?: boolean }
+    { post, userId, isFavorite, isOwner }: { post: Post; userId: string; isFavorite: boolean; isOwner: boolean }
 ) {
-    const handleAddFavorite = () => {
-        console.log("Click Favorite!");
-    }
+    const router = useRouter();
+    const [wishStatus, setWishStatus] = useState<boolean>(isFavorite);
+    const isInteractive = post.postStatus === 'ACTIVE'; // controll the Favorite and Purchase button active
+    const isRemovable = post.postStatus !== 'IN_TRANSACTION'; // PENDING ??? NOT SURE !!!!!!!!!!!!!!
 
-    const handlePurchase = () => {
-        console.log("Click Purchase!");
-    }
+    const statusColor = post.postStatus === "ACTIVE" ? "green" : post.postStatus === "PENDING" ? "blue" : post.postStatus === "IN_TRANSACTION" ? "yellow" : "gray";
+    const statusColorCSS = `text-${statusColor}-600`;
 
-    const handleQuery = () => {
-        console.log("Click Query!");
-    }
-    console.log(readOnly, isOwner);
+    const handleAddFavorite = async () => {
+        const response = await fetch(`/api/user/wishlist`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                refPostId: post.postId,
+                refPostPrice: post.postPrice,
+                refPostShortcutURL: post.postShortcutURL,
+                refPostStatus: post.postStatus,
+                refPostTitle: post.postTitle
+            }),
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            setWishStatus(!wishStatus);
+        } else {
+            console.error("Failed to add post to wishlist.");
+        }
+    };
+
+    const handleRemoveFavorite = async () => {
+        const response = await fetch(`/api/user/wishlist?userId=${userId}&refPostId=${post.postId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            setWishStatus(!wishStatus);
+        } else {
+            console.error("Failed to add post to wishlist.");
+        }
+    };
+
+    const handlePurchase = async () => {
+        try {
+            const res = await fetch("/api/order", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                body: JSON.stringify({ userId: userId, postId: post.postId })
+            });
+
+            if (!res.ok) {
+                throw new Error("Create Order error ...")
+            }
+
+            const data = await res.json();
+            const orderId = data.orderId as string;
+
+            router.push(`/order/${userId}/${orderId}`);
+        } catch (error) {
+            console.log(error);
+            alert("Create New Order error ... please try again ...");
+        }
+    };
+
+    const handleDeletePost = async () => {
+        try {
+            const res = await fetch(`/api/post?postid=${post.postId}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (!res.ok) {
+                throw new Error("Delete Post Error");
+            }
+
+            router.push('/explore');
+        } catch (error) {
+            console.log(error);
+            alert("Delete Post Failed ... Please try again ...");
+        }
+    };
+
+    const handleEditPost = () => {
+        router.push(`/explore/${post.postId}/edit`);
+    };
 
     return (
         <div className='flex flex-col lg:flex-row justify-center items-center w-full h-full'>
@@ -51,11 +132,24 @@ export default function PostDetail(
                         <p className="text-sm text-gray-600">{post.postDescription}</p>
                     </div>
 
+                    <div className='flex w-full px-4'>
+                        <p className={`text-sm ${statusColorCSS}`}>{post.postStatus}</p>
+                    </div>
+
                     {/* Buttons at the bottom */}
                     <div className="flex w-full h-16 rounded-lg px-2 my-2">
-                        <button id={`${post.postId}&F`} onClick={handleAddFavorite} className="w-1/3 bg-yellow-500 text-white hover:bg-yellow-600">Favorite</button>
-                        <button id={`${post.postId}&P`} onClick={handlePurchase} className="w-1/3 bg-blue-500 text-white hover:bg-blue-700">Purchase</button>
-                        <button id={`${post.postId}&Q`} onClick={handleQuery} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button>
+                        {isOwner ? (
+                            <>
+                                <button onClick={handleEditPost} disabled={!isInteractive} className='flex-1 mr-2 bg-blue-500 text-white hover:bg-blue-700 rounded'>Edit Post</button>
+                                <button onClick={handleDeletePost} disabled={!isRemovable} className='flex-1 ml-2 bg-red-500 text-white hover:bg-red-700 rounded'>Delete Post</button>
+                            </>
+                        ) : (
+                            <>
+                                <WishBtn wishStatus={wishStatus} addToWishlist={handleAddFavorite} removeFromWishlist={handleRemoveFavorite} isActive={isInteractive} />
+                                <button disabled={!isInteractive} onClick={handlePurchase} className="flex-auto bg-blue-500 text-white hover:bg-blue-700 rounded">Purchase</button>
+                                {/* <button id={`${post.postId}&Q`} onClick={handleQuery} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button> */}
+                            </>
+                        )}
                     </div>
                 </div>
             </>
@@ -64,6 +158,13 @@ export default function PostDetail(
             <>
                 {/* Owner Header Bar*/}
                 <div className='flex h-16 w-full items-center p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] lg:hidden'>
+                    <Image
+                        src={`/images/${post.postSeller.sellerAvatarURL}`}
+                        alt="Owner Avatar"
+                        className="p-1 rounded-full"
+                        width={40}
+                        height={40}
+                    />
                     <p className="text-sm text-gray-600 mb-0 text-left">{post.postSeller.sellerName}</p>
                 </div>
 
@@ -80,11 +181,24 @@ export default function PostDetail(
                     </div>
                 </div>
 
+                <div className='w-full px-4 lg:hidden'>
+                    <p className={`text-sm ${statusColorCSS}`}>{post.postStatus}</p>
+                </div>
+
                 {/* Button Footer Bar */}
                 <div className='flex w-full h-16 lg:hidden'>
-                    <button id={`${post.postId}&F`} className="w-1/3 bg-yellow-500 text-white hover:bg-yellow-600">Favorite</button>
-                    <button id={`${post.postId}&P`} className="w-1/3 bg-blue-500 text-white hover:bg-blue-700">Purchase</button>
-                    <button id={`${post.postId}&Q`} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button>
+                    {isOwner ? (
+                        <>
+                            <button onClick={handleEditPost} disabled={!isInteractive} className='w-1/2 bg-blue-500 text-white hover:bg-blue-700'>Edit Post</button>
+                            <button onClick={handleDeletePost} disabled={!isRemovable} className='w-1/2 bg-red-500 text-white hover:bg-red-700'>Delete Post</button>
+                        </>
+                    ) : (
+                        <>
+                            <WishBtn wishStatus={wishStatus} addToWishlist={handleAddFavorite} removeFromWishlist={handleRemoveFavorite} isActive={isInteractive} />
+                            <button disabled={!isInteractive} onClick={handlePurchase} className="flex-auto bg-blue-500 text-white hover:bg-blue-700">Purchase</button>
+                            {/* <button id={`${post.postId}&Q`} onClick={handleQuery} className="w-1/3 bg-red-500 text-white hover:bg-red-700">Query</button> */}
+                        </>
+                    )}
                 </div>
             </>
         </div>

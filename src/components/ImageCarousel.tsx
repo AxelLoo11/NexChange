@@ -1,8 +1,9 @@
 "use client";
 
+import { PostImage } from '@/models';
 import { useState } from 'react';
 
-const ImageCarousel = ({ imageUrls }: { imageUrls: string[] }) => {
+const ImageCarousel = ({ imageUrls }: { imageUrls: PostImage[] }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // Function to go to the next image
@@ -30,7 +31,7 @@ const ImageCarousel = ({ imageUrls }: { imageUrls: string[] }) => {
     return (
         <div className="relative group w-full h-full">
             <img
-                src={imageUrls[currentImageIndex]}
+                src={imageUrls[currentImageIndex].postImageURL}
                 alt={`Image ${currentImageIndex + 1}`}
                 className="w-full h-full max-w-full max-h-full object-contain"
             />

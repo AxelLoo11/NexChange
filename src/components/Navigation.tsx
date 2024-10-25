@@ -3,7 +3,7 @@
 import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import React from 'react';
-import { AiOutlineHome, AiOutlineMessage, AiOutlinePlus, AiOutlineUser, AiOutlineHistory } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlinePlus, AiOutlineUser, AiOutlineHistory } from 'react-icons/ai';
 
 const Navigation = () => {
     const { user } = useUser();
@@ -15,7 +15,7 @@ const Navigation = () => {
                     <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg h-16 flex justify-around items-center lg:hidden">
                         <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" />
                         <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" />
-                        <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" />
+                        {/* <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" /> */}
                         <NavItem href={`/order/${user.userId}`} icon={<AiOutlineHistory />} text="Order" />
                         <NavItem href={`/user/${user.userId}`} icon={<AiOutlineUser />} text="Me" />
                     </nav>
@@ -24,7 +24,7 @@ const Navigation = () => {
                     <nav className="hidden lg:flex lg:flex-col lg:fixed lg:top-20 lg:left-0 lg:h-[calc(100vh-5rem)] lg:w-40 lg:bg-white lg:shadow-lg lg:items-center lg:py-2">
                         <NavItem href="/explore" icon={<AiOutlineHome />} text="Explore" vertical />
                         <NavItem href="/post" icon={<AiOutlinePlus />} text="Post" vertical />
-                        <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" vertical />
+                        {/* <NavItem href={`/chat/${user.userId}`} icon={<AiOutlineMessage />} text="Chat" vertical /> */}
                         <NavItem href={`/order/${user.userId}`} icon={<AiOutlineHistory />} text="Order" vertical />
                         <NavItem href={`/user/${user.userId}`} icon={<AiOutlineUser />} text="Me" vertical />
                     </nav>

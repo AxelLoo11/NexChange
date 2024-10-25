@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 // needed?
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/order-histories`;
 
-function fakeGetData(userId: string): any {
+function fakeGetData(userId: string) {
   const rawdata = fakeorders.filter(
     (oh) => oh.refBuyer.userProfile.userId === userId
   );

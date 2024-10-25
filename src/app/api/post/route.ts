@@ -4,20 +4,11 @@ import { getTokenFromRequest } from "@/lib";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system/posts`;
 
-function fakeGetData(postId: string): any {
+function fakeGetData(postId: string) {
   const postdetail = fakeposts.find((p) => p.postId === postId);
-  const postimages = postdetail?.postImages;
 
-  if (postimages) {
-    const imagelist = postimages.map((img) => {
-      return {
-        postImageId: `testimage-${postId}`,
-        postImageURL: img,
-        postId: postId,
-      };
-    });
-
-    return { ...postdetail, postImages: imagelist };
+  if (postdetail) {
+    return postdetail;
   }
 
   return null;

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/contacts`;
 
-function fakeGetData(userId: string): any {
+function fakeGetData(userId: string) {
   const listId = fakeuserContactLists.find((lid) => lid.userId === userId);
   const rawdata = fakeuserContacts.filter(
     (c) => c.contactListId === listId?.contactListId

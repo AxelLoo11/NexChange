@@ -4,7 +4,7 @@ import Image from 'next/image';
 import TabGallary from '@/components/TabGallary';
 import LogoutButton from '@/components/LogoutBtn';
 import { cookies } from 'next/headers';
-import { RefPost, UserWishPost } from '@/models';
+import { RefPost } from '@/models';
 
 interface PostHitory {
   postHistoryListId: string;

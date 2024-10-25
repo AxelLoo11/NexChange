@@ -2,6 +2,7 @@
 
 import PostDetail from '@/components/PostDetail';
 import PostModal from '@/components/PostModal';
+import { useUser } from '@/context/UserContext';
 import { Post } from '@/models';
 import React, { useEffect, useState } from 'react';
 
@@ -17,30 +18,49 @@ function PostDetailModalPage({ params }: { params: { postid: string } }) {
         },
         userId: 'loading ...',
         postName: 'Loading ...',
-        postDescription: null,
+        postDescription: "Loading ...",
         postPrice: 0,
         postStatus: 'ACTIVE'
     };
 
     const [post, setPost] = useState<Post>(defaultPost);
+    const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isOwner, setIsOwner] = useState<boolean>(false);
+
+    const { user } = useUser();
+    const userId = user?.userId || "";
 
     useEffect(() => {
         const fetchPostDetail = async () => {
             try {
-                const response = await fetch(`/api/post?postid=${params.postid}`, {
+                const fetchpostRes = await fetch(`/api/post?postid=${params.postid}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
 
-                if (!response.ok) {
+                if (!fetchpostRes.ok) {
                     throw new Error('Failed to fetch post details');
                 }
 
-                const postData = await response.json();
+                const postData = await fetchpostRes.json();
                 setPost(postData); // Set the fetched post data
+
+                const checkFavoriteRes = await fetch(`/api/user/wishlist?userid=${userId}&postid=${postData.postId}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (!checkFavoriteRes.ok) {
+                    throw new Error('Failed to check post wish ...');
+                }
+
+                const checkResult = await checkFavoriteRes.json(); // boolean
+                setIsFavorite(checkResult);
+
+                setIsOwner(postData.userId === userId);
             } catch (error) {
                 console.error(error);
-                // Handle the error as needed, e.g., set an error state or show a notification
+                alert("Fetch Post detail failed ...");
             }
         };
 
@@ -51,7 +71,7 @@ function PostDetailModalPage({ params }: { params: { postid: string } }) {
 
     return (
         <PostModal>
-            <PostDetail post={post} />
+            <PostDetail post={post} isFavorite={isFavorite} isOwner={isOwner} userId={userId} />
         </PostModal>
     )
 }

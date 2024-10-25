@@ -56,6 +56,12 @@ export type UserDetailInfo = {
     ------------------------------------
 */
 
+export type PostImage = {
+  postImageId: string;
+  postImageURL: string;
+  postId: string;
+};
+
 export type Post = {
   postId: string;
   userId: string; // post owner id
@@ -65,7 +71,7 @@ export type Post = {
   postPrice: number;
   postStatus: string;
   postShortcutURL: string;
-  postImages: string[] | null; // allow null value when get all posts
+  postImages: PostImage[] | null; // allow null value when get all posts
   postSeller: {
     sellerName: string;
     sellerAvatarURL: string;
@@ -91,7 +97,7 @@ export type Order = {
   refBuyer: OrderUserDetail; // includong buyer profile and contact
   refSeller: OrderUserDetail; // only seller profile
   refPost: RefPost;
-  createdAt: Date;
+  dateTimeCreated: Date;
   orderStatus: string;
 };
 

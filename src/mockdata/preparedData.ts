@@ -7,6 +7,7 @@ import {
   OrderUserDetail,
   Order,
   UserDetailInfo,
+  PostImage,
 } from "@/models";
 
 const fakeDescription: string[] = [
@@ -151,9 +152,15 @@ const createFakePost = (
   owner: UserProfile,
   status: number
 ): Post => {
-  const imageurls: string[] = [];
+  const imageurls: PostImage[] = [];
   for (let i = 0; i < (num % 4) + 2; i++) {
-    imageurls.push(`${FAKE_IMG_BASE_URL_2}/${num * 5 + i}/200/300`);
+    imageurls.push({
+      postImageURL: `${FAKE_IMG_BASE_URL_2}/${num * 5 + i}/200/300`,
+      postImageId: `testpostImg-${num.toString().padStart(3, "0")}-${i
+        .toString()
+        .padStart(3, "0")}`,
+      postId: `testpost-${num.toString().padStart(3, "0")}`,
+    });
   }
 
   return {
@@ -241,7 +248,7 @@ const createFakeOrder = (
     refBuyer: buyer,
     refSeller: seller,
     refPost: post,
-    createdAt: new Date(2024, 9, 8, 10, num * 5),
+    dateTimeCreated: new Date(2024, 9, 8, 10, num * 5),
     orderStatus: orderStatusEnum[status],
   };
 };

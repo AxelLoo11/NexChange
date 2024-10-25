@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from "uuid"
 
-
 export default function PostProductPage() {
   const router = useRouter();
   const { user } = useUser();
@@ -72,8 +71,7 @@ export default function PostProductPage() {
       });
 
       if (uploadRes.ok) {
-        // Return the full URL of the uploaded image
-        console.log("The image url is: ", url);
+        // console.log("The image url is: ", url);
         return url;
       } else {
         throw new Error('Upload failed');
@@ -82,7 +80,6 @@ export default function PostProductPage() {
 
     try {
       const uploadedURLs = await Promise.all(uploadPromises);
-      // alert('All images uploaded successfully!');
       return uploadedURLs;
     } catch (uploadError) {
       console.log(uploadError);
@@ -156,7 +153,7 @@ export default function PostProductPage() {
       </div>
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)] h-[calc(100vh-5rem)] bg-gray-50 overflow-auto p-4">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Create Post
+          Publish New Post
         </h2>
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -217,7 +214,7 @@ export default function PostProductPage() {
           </div>
 
           <div className="flex flex-col mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Shortcut Display Image</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Post Shortcut Display Image</label>
             <input
               type="file"
               accept="image/*"

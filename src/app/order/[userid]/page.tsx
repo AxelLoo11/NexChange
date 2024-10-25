@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation'
 import OrderList from '@/components/OrderList';
-import { Order, UserContact, UserOrderHistory } from '@/models';
+import { UserContact, UserOrderHistory } from '@/models';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';

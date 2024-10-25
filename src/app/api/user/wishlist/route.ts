@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/wish-posts`;
 
-function fakeGetData(userId: string): any {
+function fakeGetData(userId: string) {
   const oridata = userinfoList.find((uif) => uif.userId === userId);
   const rawdata = oridata?.userWishPostList;
 
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
 
       const data = fakeGetCompare(userId, postId);
 
-      return new NextResponse(JSON.stringify(data), { status: 200 });
+      return NextResponse.json(data, { status: 200 });
     } catch (error) {
       console.log(error);
       return new NextResponse("Error comparing wish post", { status: 500 });

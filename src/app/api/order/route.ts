@@ -6,7 +6,7 @@ import { fakeorders } from "@/mockdata";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
 
-function fakeGetData(orderId: string): any {
+function fakeGetData(orderId: string) {
   const rawdata = fakeorders.find((o) => o.orderId === orderId);
   if (rawdata) {
     const userId = rawdata.refBuyer.userProfile.userId;
@@ -32,7 +32,7 @@ function fakeGetData(orderId: string): any {
         buyerContactNumber: rawdata.refBuyer.userContact?.contactNumber,
       },
       userId: userId,
-      createdAt: rawdata.createdAt,
+      dateTimeCreated: rawdata.dateTimeCreated,
     };
   }
   return null;
@@ -93,6 +93,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         Authorization: authHeader,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ userId: userId, postId: postId }),
     });

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 // const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/post-histories`;
 
-function fakeGetData(userId: string): any {
+function fakeGetData(userId: string) {
   const oridata = userinfoList.find((uif) => uif.userId === userId);
   const rawdata = oridata?.userPostHistoryList;
 

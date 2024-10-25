@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = await res.json();
+  const data = await res.json(); // should be {postImageId, postImageURL, postId}
 
   return NextResponse.json(data, { status: res.status });
 }
