@@ -5,12 +5,12 @@ import ImageCarousel from './ImageCarousel';
 import Image from 'next/image';
 import { Post } from '@/models';
 import WishBtn from './WishBtn';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 export default function PostDetail(
     { post, userId, isFavorite, isOwner }: { post: Post; userId: string; isFavorite: boolean; isOwner: boolean }
 ) {
-    const router = useRouter();
+    // const router = useRouter();
     const [wishStatus, setWishStatus] = useState<boolean>(isFavorite);
     const isInteractive = post.postStatus === 'ACTIVE'; // controll the Favorite and Purchase button active
     const isRemovable = post.postStatus !== 'IN_TRANSACTION'; // PENDING ??? NOT SURE !!!!!!!!!!!!!!
@@ -73,7 +73,8 @@ export default function PostDetail(
             const data = await res.json();
             const orderId = data.orderId as string;
 
-            router.push(`/order/${userId}/${orderId}`);
+            // router.push(`/order/${userId}/${orderId}`);
+            window.location.href = `/order/${userId}/${orderId}`;
         } catch (error) {
             console.log(error);
             alert("Create New Order error ... please try again ...");
@@ -91,7 +92,8 @@ export default function PostDetail(
                 throw new Error("Delete Post Error");
             }
 
-            router.push('/explore');
+            // router.push('/explore');
+            window.location.href = '/explore';
         } catch (error) {
             console.log(error);
             alert("Delete Post Failed ... Please try again ...");
@@ -99,7 +101,8 @@ export default function PostDetail(
     };
 
     const handleEditPost = () => {
-        router.push(`/explore/${post.postId}/edit`);
+        // router.push(`/post/edit/${post.postId}`);
+        window.location.href = `/post/edit/${post.postId}`;
     };
 
     return (

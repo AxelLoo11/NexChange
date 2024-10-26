@@ -50,6 +50,38 @@ export type UserDetailInfo = {
   userPostHistoryList: UserPostHistory[];
 };
 
+export type PostHitory = {
+  postHistoryListId: string;
+  userId: string;
+  postHistoryId: string;
+  refPostId: string;
+  refPostTitle: string;
+  refPostShortcutURL: string;
+  refPostStatus: string;
+  refPostPrice: number;
+};
+
+export type UserPostHistoryList = {
+  postHistoryListId: string;
+  userId: string;
+  postHistories: PostHitory[];
+};
+
+export type WishPost = {
+  wishPostId: string;
+  refPostId: string;
+  refPostPrice: number;
+  refPostShortcutURL: string;
+  refPostStatus: string;
+  refPostTitle: string;
+};
+
+export type UserWishPostList = {
+  wishPostListId: string;
+  userId: string;
+  wishPosts: WishPost[];
+};
+
 /*  
     ------------------------------------
     Post Service Data Type 
@@ -101,7 +133,44 @@ export type Order = {
   orderStatus: string;
 };
 
+export type OrderDetail = {
+  orderId: string;
+  refPostId: string;
+  refPostTitle: string;
+  refPostShortcutURL: string;
+  refPostPrice: number;
+  orderStatus: string;
+  sellerDetail: {
+    sellerId: string;
+    refUserId: string;
+    sellerName: string;
+    sellerAvatarURL: string;
+  };
+  buyerDetail: {
+    buyerId: string;
+    refUserId: string;
+    buyerName: string;
+    buyerAddress: string;
+    buyerPostalCode: string;
+    buyerContactNumber: string;
+  };
+  userId: string;
+  createdAt: Date;
+};
+
 export type OrderUserDetail = {
   userProfile: UserProfile;
   userContact?: UserContact;
+};
+
+export type UserContactList = {
+  contactListId: string;
+  userId: string;
+  userContacts: UserContact[];
+};
+
+export type UserOrderHistoryList = {
+  orderHistoryListId: string;
+  userId: string;
+  userOrderHistories: UserOrderHistory[];
 };

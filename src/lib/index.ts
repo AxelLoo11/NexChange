@@ -1,1 +1,2 @@
-export * from "./serverfunc";
+export * from "./apiRoutefunc";
+export * from "./serverCompfunc";

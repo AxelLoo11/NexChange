@@ -1,59 +1,10 @@
 import Navigation from '@/components/Navigation'
 import OrderList from '@/components/OrderList';
-import { UserContact, UserOrderHistory } from '@/models';
+import { fetchUserContacts, fetchUserOrders } from '@/lib';
+import { UserContact, UserContactList, UserOrderHistoryList } from '@/models';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';
-
-interface UserContactList {
-  contactListId: string;
-  userId: string;
-  userContacts: UserContact[];
-}
-
-interface UserOrderHistoryList {
-  orderHistoryListId: string;
-  userId: string;
-  userOrderHistories: UserOrderHistory[];
-}
-
-async function fetchUserContacts(userid: string, authHeader: string): Promise<UserContactList> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/contact?userid=${userid}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `${authHeader}`, // Include token in headers
-    },
-    cache: 'no-store', // Ensures fresh data is fetched
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch user contacts');
-  }
-
-  const data = await res.json();
-
-  return data;
-}
-
-async function fetchUserOrders(userid: string, authHeader: string): Promise<UserOrderHistoryList> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/orderhistory?userid=${userid}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `${authHeader}`, // Include token in headers
-    },
-    cache: 'no-store', // Ensures fresh data is fetched
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch order histories');
-  }
-
-  const data = await res.json();
-
-  return data;
-}
 
 export default async function OrderHistoryPage({ params }: { params: { userid: string } }) {
   const cookieStore = cookies();

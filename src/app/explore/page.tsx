@@ -3,31 +3,16 @@ import Navigation from '@/components/Navigation';
 import { Post } from '@/models';
 import React from 'react';
 import { cookies } from 'next/headers';
-
-// Server-side fetch for Posts
-async function fetchPosts(): Promise<Post[]> {
-  const cookieStore = cookies(); // Access cookies
-  const token = cookieStore.get('token');
-  const tokenType = cookieStore.get('tokenType');
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/post`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `${tokenType?.value}${token?.value}`, // Include token in headers
-    },
-    cache: 'no-store', // Ensures fresh data is fetched
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch Posts');
-  }
-
-  return res.json();
-}
+import { fetchAllPosts } from '@/lib';
 
 export default async function ExplorePage() {
-  const posts: Post[] = await fetchPosts();
+  const cookieStore = cookies();
+  const token = cookieStore.get('token')?.value || "";
+  const tokenType = cookieStore.get('tokenType')?.value || "";
+  const authHeader: string = `${tokenType}${token}`;
+
+  const posts: Post[] = await fetchAllPosts(authHeader);
+  
   return (
     <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">
       <div className='lg:w-40 w-0'>

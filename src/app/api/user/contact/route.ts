@@ -10,7 +10,7 @@ function fakeGetData(userId: string) {
     (c) => c.contactListId === listId?.contactListId
   );
   const data = {
-    contactListId: listId,
+    contactListId: listId?.contactListId || "errorlistid",
     userId: userId,
     userContacts: rawdata,
   };

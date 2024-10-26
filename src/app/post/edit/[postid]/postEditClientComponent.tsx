@@ -1,28 +1,13 @@
 "use client";
 
 import Navigation from '@/components/Navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { v4 as uuidv4 } from "uuid"
 import { Post, PostImage } from '@/models';
 
-export default function PostEditPage({ params }: { params: { postid: string } }) {
-    const defaultPost: Post = {
-        postId: params.postid,
-        postTitle: 'Loading ...',
-        postShortcutURL: 'https://avatar.iran.liara.run/public',
-        postImages: [],
-        postSeller: {
-            sellerName: "Loading ...",
-            sellerAvatarURL: "01.jpg",
-        },
-        userId: 'loading ...',
-        postName: 'Loading ...',
-        postDescription: "Loading ...",
-        postPrice: 0,
-        postStatus: 'ACTIVE'
-    };
-    const [post, setPost] = useState<Post>(defaultPost);
-
+export default function PostEditClientComponent({ post }: {
+    post: Post;
+}) {
     const [title, setTitle] = useState<string>(post.postTitle);
     const [name, setName] = useState<string>(post.postName);
     const [description, setDescription] = useState<string>(post.postDescription || "");
@@ -30,37 +15,6 @@ export default function PostEditPage({ params }: { params: { postid: string } })
     const [shortcutURL, setShortcutURL] = useState<string>(post.postShortcutURL);
     const [shortcutFile, setShortcutFile] = useState<File | null>(null);
     const [postImages, setPostImages] = useState<PostImage[]>(post.postImages || []);
-
-    useEffect(() => {
-        const fetchPostDetail = async () => {
-            try {
-                const fetchpostRes = await fetch(`/api/post?postid=${params.postid}`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                if (!fetchpostRes.ok) {
-                    throw new Error('Failed to fetch post details');
-                }
-
-                const postData = await fetchpostRes.json();
-                setPost(postData); // Set the fetched post data
-
-                setTitle(postData.postTitle);
-                setName(postData.postName);
-                setDescription(postData.postDescription);
-                setPrice(postData.postPrice);
-                setShortcutURL(postData.postShortcutURL);
-                setPostImages(postData.postImages);
-
-            } catch (error) {
-                console.error(error);
-                alert("Fetch Post detail failed ...");
-            }
-        };
-
-        fetchPostDetail(); // Call the function to fetch post details
-    }, []); // Depend on postId so the effect runs when it changes
 
     const uploadImageToS3 = async (file: File | null): Promise<string | null> => {
         if (!file) return null;
@@ -103,7 +57,7 @@ export default function PostEditPage({ params }: { params: { postid: string } })
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                postId: params.postid,
+                postId: post.postId,
                 postTitle: title,
                 postName: name,
                 postDescription: description,

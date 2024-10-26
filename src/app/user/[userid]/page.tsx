@@ -4,79 +4,8 @@ import Image from 'next/image';
 import TabGallary from '@/components/TabGallary';
 import LogoutButton from '@/components/LogoutBtn';
 import { cookies } from 'next/headers';
-import { RefPost } from '@/models';
-
-interface PostHitory {
-  postHistoryListId: string;
-  userId: string;
-  postHistoryId: string;
-  refPostId: string;
-  refPostTitle: string;
-  refPostShortcutURL: string;
-  refPostStatus: string;
-  refPostPrice: number;
-}
-
-interface UserPostHistoryList {
-  postHistoryListId: string;
-  userId: string;
-  postHistories: PostHitory[];
-}
-
-interface WishPost {
-  wishPostId: string;
-  refPostId: string;
-  refPostPrice: number;
-  refPostShortcutURL: string;
-  refPostStatus: string;
-  refPostTitle: string;
-}
-
-interface UserWishPostList {
-  wishPostListId: string;
-  userId: string;
-  wishPosts: WishPost[];
-}
-
-async function fetchUserWishList(userId: string, authHeader: string): Promise<UserWishPostList> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/wishlist?userid=${userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `${authHeader}`, // Include token in headers
-    },
-    cache: 'no-store', // Ensures fresh data is fetched
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch Wish Posts');
-  }
-
-  const data = await res.json();
-  // console.log("Fetched WishPosts: ", data);
-
-  return data;
-}
-
-async function fetchUserPostHistory(userId: string, authHeader: string): Promise<UserPostHistoryList> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/posthistory?userid=${userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `${authHeader}`, // Include token in headers
-    },
-    cache: 'no-store', // Ensures fresh data is fetched
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch Post Historys');
-  }
-
-  const data = await res.json();
-  // console.log("Fetched PostHistories: ", data);
-
-  return data;
-}
+import { RefPost, UserPostHistoryList, UserWishPostList } from '@/models';
+import { fetchUserPostHistory, fetchUserWishList } from '@/lib';
 
 export default async function UserInfoPage({ params }: { params: { userid: string } }) {
   const cookieStore = cookies();
