@@ -1,43 +1,8 @@
 import { getTokenFromRequest } from "@/lib";
-import { userinfoList } from "@/mockdata";
+// import { fakeCheckPostWish, fakeGetUserWishListData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/wish-posts`;
-
-function fakeGetData(userId: string) {
-  const oridata = userinfoList.find((uif) => uif.userId === userId);
-  const rawdata = oridata?.userWishPostList;
-
-  if (rawdata) {
-    const wishPostListId = `testwishpostlist-${userId}`;
-    const listdata = rawdata.map((wish) => {
-      return {
-        wishPostId: wish.wishPostId,
-        refPostId: wish.refPost.refPostId,
-        refPostPrice: wish.refPost.refPostPrice,
-        refPostShortcutURL: wish.refPost.refPostShortcutURL,
-        refPostStatus: wish.refPost.refPostStatus,
-        refPostTitle: wish.refPost.refPostTitle,
-      };
-    });
-
-    return {
-      wishPostListId: wishPostListId,
-      userId: userId,
-      wishPosts: listdata,
-    };
-  }
-
-  return null;
-}
-
-function fakeGetCompare(userId: string, postId: string): boolean {
-  const userinfo = userinfoList.find((user) => user.userId === userId);
-  const checkResult = userinfo?.userWishPostList.find(
-    (post) => post.refPost.refPostId === postId
-  );
-  return checkResult ? true : false;
-}
 
 // Get wishpost by userid || determine whether post in wishlist
 export async function GET(req: NextRequest) {
@@ -55,25 +20,25 @@ export async function GET(req: NextRequest) {
   // Handle specific wish post compare
   if (postId) {
     try {
-      // const response = await fetch(
-      //   `${API_BASE_URL}/compare?userId=${userId}&postId=${postId}`,
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       Authorization: authHeader,
-      //     },
-      //   }
-      // );
+      const response = await fetch(
+        `${API_BASE_URL}/compare?userId=${userId}&postId=${postId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: authHeader,
+          },
+        }
+      );
 
-      // if (!response.ok) {
-      //   return new NextResponse("Failed to compare wish post", {
-      //     status: response.status,
-      //   });
-      // }
+      if (!response.ok) {
+        return new NextResponse("Failed to compare wish post", {
+          status: response.status,
+        });
+      }
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      const data = fakeGetCompare(userId, postId);
+      // const data = fakeCheckPostWish(userId, postId);
 
       return NextResponse.json(data, { status: 200 });
     } catch (error) {
@@ -84,22 +49,22 @@ export async function GET(req: NextRequest) {
 
   // Handle fetching wish posts by userId
   try {
-    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const response = await fetch(`${API_BASE_URL}/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!response.ok) {
-    //   return new NextResponse("Failed to fetch wish posts", {
-    //     status: response.status,
-    //   });
-    // }
+    if (!response.ok) {
+      return new NextResponse("Failed to fetch wish posts", {
+        status: response.status,
+      });
+    }
 
-    // const data = await response.json();
+    const data = await response.json();
 
-    const data = fakeGetData(userId);
+    // const data = fakeGetUserWishListData(userId);
 
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {

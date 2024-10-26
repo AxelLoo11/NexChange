@@ -1,32 +1,8 @@
 import { getTokenFromRequest } from "@/lib";
-import { fakeorders } from "@/mockdata";
+// import { fakeGetUserOrderHistoryData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
-// needed?
+
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/order-histories`;
-
-function fakeGetData(userId: string) {
-  const rawdata = fakeorders.filter(
-    (oh) => oh.refBuyer.userProfile.userId === userId
-  );
-  const listdata = rawdata.map((order) => {
-    return {
-      orderHistoryListId: `orderhistorylist-${userId}`,
-      userId: userId,
-      orderHistoryId: `orderhistory-${userId}`,
-      refOrderId: order.orderId,
-      refOrderTitle: order.refPost.refPostTitle,
-      refOrderShortcutURL: order.refPost.refPostShortcutURL,
-      refOrderPrice: order.refPost.refPostPrice,
-      refOrderStatus: order.orderStatus,
-    };
-  });
-
-  return {
-    orderHistoryListId: `orderhistorylist-${userId}`,
-    userId: userId,
-    userOrderHistories: listdata,
-  };
-}
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
@@ -40,22 +16,22 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const response = await fetch(`${API_BASE_URL}/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!response.ok) {
-    //   return new NextResponse("Failed to fetch user order history", {
-    //     status: response.status,
-    //   });
-    // }
+    if (!response.ok) {
+      return new NextResponse("Failed to fetch user order history", {
+        status: response.status,
+      });
+    }
 
-    // const data = await response.json();
+    const data = await response.json();
 
-    const data = fakeGetData(userId);
+    // const data = fakeGetUserOrderHistoryData(userId);
 
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {

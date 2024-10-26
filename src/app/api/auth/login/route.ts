@@ -1,44 +1,33 @@
-import { fakeuseraccounts } from "@/mockdata";
+// import { mockCheckAuth } from "@/lib/fakeApiRouteFunc";
 import { NextResponse } from "next/server";
 
-const userServiceUrl: string =
-  `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/auth/login`;
-
-function mockCheckAuth(email: string, password: string): string | null {
-  const authdata = fakeuseraccounts.find((u) => u.userEmail === email);
-
-  if (authdata) {
-    return authdata.userPassword === password ? authdata.userId : null;
-  }
-
-  return null;
-}
+const userServiceUrl: string = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/auth/login`;
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
   console.log(`calling ${userServiceUrl}`);
 
-  // const userServiceResponse = await fetch(userServiceUrl, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ userEmail:email, userPassword:password }),
-  // });
+  const userServiceResponse = await fetch(userServiceUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userEmail: email, userPassword: password }),
+  });
 
-  // if (!userServiceResponse.ok) {
-  //   return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-  // }
-
-  // const { token, tokenType, userId } = await userServiceResponse.json();
-
-  // Mock Test Part
-  const userId = mockCheckAuth(email, password);
-  if (userId === null) {
+  if (!userServiceResponse.ok) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
-  const token = "mock-jwt-token";
-  const tokenType = "Bearer ";
+
+  const { token, tokenType, userId } = await userServiceResponse.json();
+
+  // Mock Test Part
+  // const userId = mockCheckAuth(email, password);
+  // if (userId === null) {
+  //   return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  // }
+  // const token = "mock-jwt-token";
+  // const tokenType = "Bearer ";
 
   // Create response object
   const response = NextResponse.json(

@@ -1,21 +1,8 @@
 import { getTokenFromRequest } from "@/lib";
-import { fakeuserContactLists, fakeuserContacts } from "@/mockdata";
+// import { fakeGetUserContactsData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/contacts`;
-
-function fakeGetData(userId: string) {
-  const listId = fakeuserContactLists.find((lid) => lid.userId === userId);
-  const rawdata = fakeuserContacts.filter(
-    (c) => c.contactListId === listId?.contactListId
-  );
-  const data = {
-    contactListId: listId?.contactListId || "errorlistid",
-    userId: userId,
-    userContacts: rawdata,
-  };
-  return data;
-}
 
 // get contacts by userid
 export async function GET(req: NextRequest) {
@@ -30,22 +17,22 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const response = await fetch(`${API_BASE_URL}/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!response.ok) {
-    //   return new NextResponse("Failed to fetch user contacts", {
-    //     status: response.status,
-    //   });
-    // }
+    if (!response.ok) {
+      return new NextResponse("Failed to fetch user contacts", {
+        status: response.status,
+      });
+    }
 
-    // const data = await response.json();
+    const data = await response.json();
 
-    const data = fakeGetData(userId);
+    // const data = fakeGetUserContactsData(userId);
 
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {

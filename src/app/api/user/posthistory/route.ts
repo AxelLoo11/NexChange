@@ -1,36 +1,8 @@
 import { getTokenFromRequest } from "@/lib";
-import { userinfoList } from "@/mockdata";
+// import { fakeGetUserPostHistoryData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
-// const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/post-histories`;
-
-function fakeGetData(userId: string) {
-  const oridata = userinfoList.find((uif) => uif.userId === userId);
-  const rawdata = oridata?.userPostHistoryList;
-
-  if (rawdata) {
-    const postHistoryListId = `testposthistoryId-${userId}`;
-    const listdata = rawdata.map((ph) => {
-      return {
-        postHistoryListId: postHistoryListId,
-        userId: userId,
-        postHistoryId: ph.postHistoryId,
-        refPostId: ph.refPost.refPostId,
-        refPostTitle: ph.refPost.refPostTitle,
-        refPostShortcutURL: ph.refPost.refPostShortcutURL,
-        refPostStatus: ph.refPost.refPostStatus,
-        refPostPrice: ph.refPost.refPostPrice, // ???? missing in postman ...
-      };
-    });
-    return {
-      postHistoryListId: postHistoryListId,
-      userId: userId,
-      postHistories: listdata,
-    };
-  }
-
-  return null;
-}
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/post-histories`;
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
@@ -44,22 +16,22 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // const response = await fetch(`${API_BASE_URL}/${userId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const response = await fetch(`${API_BASE_URL}/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!response.ok) {
-    //   return new NextResponse("Failed to fetch user post history", {
-    //     status: response.status,
-    //   });
-    // }
+    if (!response.ok) {
+      return new NextResponse("Failed to fetch user post history", {
+        status: response.status,
+      });
+    }
 
-    // const data = await response.json();
+    const data = await response.json();
 
-    const data = fakeGetData(userId);
+    // const data = fakeGetUserPostHistoryData(userId);
 
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {

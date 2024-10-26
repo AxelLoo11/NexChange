@@ -2,76 +2,27 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
-import { fakeorders } from "@/mockdata";
+// import { fakeGetOrdertData } from "@/lib/fakeApiRouteFunc";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
-
-function fakeGetData(orderId: string) {
-  const rawdata = fakeorders.find((o) => o.orderId === orderId);
-  if (rawdata) {
-    const userId = rawdata.refBuyer.userProfile.userId;
-    return {
-      orderId: orderId,
-      refPostId: rawdata.refPost.refPostId,
-      refPostTitle: rawdata.refPost.refPostTitle,
-      refPostShortcutURL: rawdata.refPost.refPostShortcutURL,
-      refPostPrice: rawdata.refPost.refPostPrice,
-      orderStatus: rawdata.orderStatus,
-      sellerDetail: {
-        sellerId: `testsellerId-${orderId}`,
-        refUserId: rawdata.refSeller.userProfile.userId,
-        sellerName: rawdata.refSeller.userProfile.userNickName,
-        sellerAvatarURL: rawdata.refSeller.userProfile.userAvatarURL,
-      },
-      buyerDetail: {
-        buyerId: `testbuyerId-${orderId}`,
-        refUserId: userId,
-        buyerName: rawdata.refBuyer.userProfile.userNickName,
-        buyerAddress: rawdata.refBuyer.userContact?.contactAddress,
-        buyerPostalCode: rawdata.refBuyer.userContact?.postalCode,
-        buyerContactNumber: rawdata.refBuyer.userContact?.contactNumber,
-      },
-      userId: userId,
-      dateTimeCreated: rawdata.dateTimeCreated,
-    };
-  }
-  return null;
-}
 
 // get order by orderid/sellerid/buyerid ... ?   ---->>>  [currently only use `get by orderid` for static test]
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);
   console.log("[TEST] Authheader: ", authHeader);
   const { searchParams } = new URL(req.url);
-  // const userid = searchParams.get("userid");
-  // const sellerid = searchParams.get("sellerid");
   const orderid = searchParams.get("orderid");
 
-  // let apiEndpoint = "";
-
-  // if (orderid) {
-  //   apiEndpoint = `${API_BASE_URL}/${orderid}`; // not sure about this url ...
-  // } else if (sellerid) {
-  //   apiEndpoint = `${API_BASE_URL}/seller?sellerid=${sellerid}`;
-  // } else if (userid) {
-  //   apiEndpoint = `${API_BASE_URL}/user?userid=${userid}`;
-  // } else {
-  //   return NextResponse.json(
-  //     { error: "Missing query parameters" },
-  //     { status: 400 }
-  //   );
-  // }
-
   try {
-    // const response = await fetch(apiEndpoint, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
-    // const data = await response.json();
+    const response = await fetch(`${API_BASE_URL}/${orderid}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
+    const data = await response.json();
 
-    const data = fakeGetData(orderid || "");
+    // const data = fakeGetOrdertData(orderid || "");
 
     return NextResponse.json(data);
   } catch (error) {

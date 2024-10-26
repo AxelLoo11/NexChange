@@ -1,18 +1,8 @@
-import { fakeposts } from "@/mockdata";
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenFromRequest } from "@/lib";
+// import { fakeGetAllPostData, fakeGetPostDataById } from "@/lib/fakeApiRouteFunc";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system/posts`;
-
-function fakeGetData(postId: string) {
-  const postdetail = fakeposts.find((p) => p.postId === postId);
-
-  if (postdetail) {
-    return postdetail;
-  }
-
-  return null;
-}
 
 // get all posts | get post by postId
 export async function GET(req: NextRequest) {
@@ -22,34 +12,34 @@ export async function GET(req: NextRequest) {
   console.log("[TEST]: the generated authHeader is:", authHeader);
 
   if (postId) {
-    // const res = await fetch(`${API_BASE_URL}/${postId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const res = await fetch(`${API_BASE_URL}/${postId}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!res.ok) {
-    //   return NextResponse.error(); // Return an error response if the fetch fails
-    // }
+    if (!res.ok) {
+      return NextResponse.error(); // Return an error response if the fetch fails
+    }
 
-    // const data = await res.json();
-    const data = fakeGetData(postId);
+    const data = await res.json();
+    // const data = fakeGetPostDataById(postId);
     return NextResponse.json(data, { status: 200 });
   } else {
-    // const res = await fetch(`${API_BASE_URL}`, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: authHeader,
-    //   },
-    // });
+    const res = await fetch(`${API_BASE_URL}`, {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+      },
+    });
 
-    // if (!res.ok) {
-    //   return NextResponse.error(); // Return an error response if the fetch fails
-    // }
+    if (!res.ok) {
+      return NextResponse.error(); // Return an error response if the fetch fails
+    }
 
-    // const data = await res.json();
-    const data = fakeposts;
+    const data = await res.json();
+    // const data = fakeGetAllPostData();
     return NextResponse.json(data, { status: 200 });
   }
 }
@@ -61,25 +51,25 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
 
-  // const res = await fetch(`${API_BASE_URL}/new-post`, {
-  //   method: "POST",
-  //   headers: {
-  //     Authorization: authHeader,
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(body),
-  // });
+  const res = await fetch(`${API_BASE_URL}/new-post`, {
+    method: "POST",
+    headers: {
+      Authorization: authHeader,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 
-  // if (!res.ok) {
-  //   return NextResponse.json(
-  //     { error: "Failed to publish new post" },
-  //     { status: 500 }
-  //   );
-  // }
+  if (!res.ok) {
+    return NextResponse.json(
+      { error: "Failed to publish new post" },
+      { status: 500 }
+    );
+  }
 
-  // const data = await res.json();
-  // return NextResponse.json(data, { status: res.status });
-  return NextResponse.json(body, { status: 200 });
+  const data = await res.json();
+  return NextResponse.json(data, { status: res.status });
+  // return NextResponse.json(body, { status: 200 });
 }
 
 // update post info (images not included ...)
