@@ -11,9 +11,9 @@ export default function HomePage() {
       >
         <div className="relative z-10 text-center space-y-4 text-white">
           {/* Project Title */}
-          <h1 className="text-5xl md:text-6xl font-bold">NexChange</h1>
+          <h1 className="text-9xl md:text-8xl font-bold shadow-lg">NexChange</h1>
           {/* Project Description */}
-          <p className="text-2xl">Discover and exchange quality second-hand items effortlessly</p>
+          <p className="text-3xl shadow-md">Discover and exchange quality second-hand items effortlessly</p>
 
           {/* Links */}
           <div className="space-y-2">

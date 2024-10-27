@@ -23,6 +23,9 @@ export default function ContactClientComponent({
             alert("Error set default");
         }
 
+        console.log(`Set contact ${contactId} as Default ...`);
+        console.log(JSON.stringify({ ...updateContact, defaultContact: true }));
+
         const newdefaultres = await fetch(`/api/user/contact`, {
             method: 'PUT',
             cache: 'no-store',
@@ -157,7 +160,11 @@ export default function ContactClientComponent({
                             </div>
                             <div className="flex space-x-2">
                                 <button
-                                    onClick={() => handleSetDefault(contact.contactId)}
+                                    id={`SAD-${contact.contactId}`}
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        handleSetDefault(contact.contactId);
+                                    }}
                                     className={`px-3 py-2 text-sm ${contact.defaultContact
                                         ? "bg-gray-300 cursor-not-allowed"
                                         : "bg-green-500 text-white hover:bg-green-600"
@@ -167,13 +174,21 @@ export default function ContactClientComponent({
                                     Set As Default
                                 </button>
                                 <button
-                                    onClick={() => handleEdit(contact.contactId)}
+                                    id={`EDIT-${contact.contactId}`}
+                                    onClick={(event) => {
+                                        event.stopPropagation();  // Prevent any parent handlers from triggering
+                                        handleEdit(contact.contactId);
+                                    }}
                                     className="px-3 py-2 bg-yellow-500 text-white hover:bg-yellow-600 rounded-md"
                                 >
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(contact.contactId)}
+                                    id={`DEL-${contact.contactId}`}
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        handleDelete(contact.contactId);
+                                    }}
                                     className="px-3 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md"
                                 >
                                     Delete

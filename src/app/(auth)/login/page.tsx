@@ -71,7 +71,7 @@ export default function LoginPage() {
       {/* Left Side (Image) */}
       <div className="w-2/3 bg-gray-100 flex items-center justify-center">
         <img
-          src="https://via.placeholder.com/300" // Replace with actual image path
+          src="/images/home-bg.jpg" // Replace with actual image path
           alt="Platform Showcase"
           className="object-cover w-full h-full"
         />

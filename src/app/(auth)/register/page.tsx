@@ -41,7 +41,9 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/home-bg.jpg')" }}
+    >
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={handleSubmit}>
@@ -104,9 +106,8 @@ const RegisterPage = () => {
                 <button
                   key={avatar}
                   type="button"
-                  className={`border-2 rounded-full overflow-hidden ${
-                    selectedAvatar === avatar ? "border-yellow-600" : "border-gray-300"
-                  }`}
+                  className={`border-2 rounded-full overflow-hidden ${selectedAvatar === avatar ? "border-yellow-600" : "border-gray-300"
+                    }`}
                   onClick={() => setSelectedAvatar(avatar)}
                 >
                   <Image
@@ -130,13 +131,13 @@ const RegisterPage = () => {
           </div>
         </form>
         <div className="mt-6">
-            <button
-              onClick={() => router.back()}
-              className="text-yellow-600 hover:text-yellow-500 underline"
-            >
-              Return to previous page
-            </button>
-          </div>
+          <button
+            onClick={() => router.back()}
+            className="text-yellow-600 hover:text-yellow-500 underline"
+          >
+            Return to previous page
+          </button>
+        </div>
       </div>
     </div>
   );
