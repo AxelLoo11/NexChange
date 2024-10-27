@@ -28,7 +28,7 @@ export default function PostDetail(
                 userId: userId,
                 refPostId: post.postId,
                 refPostPrice: post.postPrice,
-                refPostShortcutURL: post.postShortcutURL,
+                refPostShortCutURL: post.postShortcutURL,
                 refPostStatus: post.postStatus,
                 refPostTitle: post.postTittle
             }),

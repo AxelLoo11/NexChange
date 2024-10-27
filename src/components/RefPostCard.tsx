@@ -7,7 +7,7 @@ const RefPostCard = ({ post }: { post: RefPost }) => {
         <Link href={`/explore/${post.refPostId}`} className="hover:shadow-lg">
             <div className="bg-white shadow rounded overflow-hidden">
                 <img
-                    src={post.refPostShortcutURL}
+                    src={post.refPostShortCutURL}
                     alt="Post"
                     className="w-full h-48 object-cover"
                 />

@@ -56,7 +56,7 @@ export type PostHitory = {
   postHistoryId: string;
   refPostId: string;
   refPostTitle: string;
-  refPostShortcutURL: string;
+  refPostShortCutURL: string;
   refPostStatus: string;
   refPostPrice: number;
 };
@@ -71,7 +71,7 @@ export type WishPost = {
   wishPostId: string;
   refPostId: string;
   refPostPrice: number;
-  refPostShortcutURL: string;
+  refPostShortCutURL: string;
   refPostStatus: string;
   refPostTitle: string;
 };
@@ -113,7 +113,7 @@ export type Post = {
 export type RefPost = {
   refPostId: string;
   refPostTitle: string;
-  refPostShortcutURL: string;
+  refPostShortCutURL: string;
   refPostPrice: number;
   refPostStatus?: string;
 };

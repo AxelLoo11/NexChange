@@ -28,7 +28,7 @@ export function fakeGetOrdertData(orderId: string) {
       orderId: orderId,
       refPostId: rawdata.refPost.refPostId,
       refPostTitle: rawdata.refPost.refPostTitle,
-      refPostShortcutURL: rawdata.refPost.refPostShortcutURL,
+      refPostShortcutURL: rawdata.refPost.refPostShortCutURL,
       refPostPrice: rawdata.refPost.refPostPrice,
       orderStatus: rawdata.orderStatus,
       sellerDetail: {
@@ -93,7 +93,7 @@ export function fakeGetUserOrderHistoryData(userId: string) {
       orderHistoryId: `orderhistory-${userId}`,
       refOrderId: order.orderId,
       refOrderTitle: order.refPost.refPostTitle,
-      refOrderShortcutURL: order.refPost.refPostShortcutURL,
+      refOrderShortcutURL: order.refPost.refPostShortCutURL,
       refOrderPrice: order.refPost.refPostPrice,
       refOrderStatus: order.orderStatus,
     };
@@ -120,7 +120,7 @@ export function fakeGetUserPostHistoryData(userId: string) {
         postHistoryId: ph.postHistoryId,
         refPostId: ph.refPost.refPostId,
         refPostTitle: ph.refPost.refPostTitle,
-        refPostShortcutURL: ph.refPost.refPostShortcutURL,
+        refPostShortcutURL: ph.refPost.refPostShortCutURL,
         refPostStatus: ph.refPost.refPostStatus,
         refPostPrice: ph.refPost.refPostPrice, // ???? missing in postman ...
       };
@@ -152,7 +152,7 @@ export function fakeGetUserWishListData(userId: string) {
         wishPostId: wish.wishPostId,
         refPostId: wish.refPost.refPostId,
         refPostPrice: wish.refPost.refPostPrice,
-        refPostShortcutURL: wish.refPost.refPostShortcutURL,
+        refPostShortcutURL: wish.refPost.refPostShortCutURL,
         refPostStatus: wish.refPost.refPostStatus,
         refPostTitle: wish.refPost.refPostTitle,
       };

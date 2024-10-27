@@ -186,7 +186,7 @@ export const getRefPost = (post: Post): RefPost => {
   return {
     refPostId: post.postId,
     refPostTitle: post.postTittle,
-    refPostShortcutURL: post.postShortcutURL,
+    refPostShortCutURL: post.postShortcutURL,
     refPostPrice: post.postPrice,
     refPostStatus: post.postStatus,
   };
