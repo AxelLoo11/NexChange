@@ -24,7 +24,7 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
     return {
       refPostId: post.refPostId,
       refPostTitle: post.refPostTitle,
-      refPostShortcutURL: post.refPostShortcutURL,
+      refPostShortCutURL: post.refPostShortcutURL,
       refPostPrice: post.refPostPrice,
       refPostStatus: post.refPostStatus,
     }
@@ -33,7 +33,7 @@ export default async function UserInfoPage({ params }: { params: { userid: strin
     return {
       refPostId: post.refPostId,
       refPostTitle: post.refPostTitle,
-      refPostShortcutURL: post.refPostShortcutURL,
+      refPostShortCutURL: post.refPostShortcutURL,
       refPostPrice: post.refPostPrice,
       refPostStatus: post.refPostStatus,
     }

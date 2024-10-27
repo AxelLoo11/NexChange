@@ -113,7 +113,7 @@ export type Post = {
 export type RefPost = {
   refPostId: string;
   refPostTitle: string;
-  refPostShortcutURL: string;
+  refPostShortCutURL: string;
   refPostPrice: number;
   refPostStatus?: string;
 };
