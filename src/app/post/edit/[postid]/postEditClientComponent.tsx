@@ -53,8 +53,8 @@ export default function PostEditClientComponent({ post }: {
         setShortcutURL(newShortcutURL);
         setShortcutFile(null);
 
-        const response = await fetch(`/api/post/update`, {
-            method: 'POST',
+        const response = await fetch(`/api/post`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 postId: post.postId,

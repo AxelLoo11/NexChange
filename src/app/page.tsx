@@ -5,8 +5,9 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <div className='text-white'>Home Page</div>
-      <a href='/explore'>Explore</a>
+      <div className="bg-gray-100 top-20 min-h-[calc(100vh-5rem)] lg:flex w-full overflow-auto sticky">
+        
+      </div>
     </>
   );
 }
