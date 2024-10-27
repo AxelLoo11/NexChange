@@ -19,8 +19,8 @@ pipeline {
             }
         }
 
-        stage("Start"){
-            steps{     
+        stage("Start") {
+            steps {     
                 script {
                     sh "cd NexChange"
                     sh "tmux attach"
@@ -43,6 +43,7 @@ pipeline {
                 sh 'lsof -i :3000 && kill $(lsof -t -i :3000) || echo "No process running on port 3000"'
             }
         }
+
         stage('Start New Application') {
             steps {
                 // 启动新的Next.js应用
@@ -50,13 +51,13 @@ pipeline {
             }
         }
     }
-        post {
-            success {
-                echo 'Deployment successful!'
-            }
-            failure {
-                echo 'Deployment failed.'
-            }
-        }
-}
 
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed.'
+        }
+    }
+}
