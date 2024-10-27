@@ -8,7 +8,7 @@ import { Post, PostImage } from '@/models';
 export default function PostEditClientComponent({ post }: {
     post: Post;
 }) {
-    const [title, setTitle] = useState<string>(post.postTitle);
+    const [title, setTitle] = useState<string>(post.postTittle);
     const [name, setName] = useState<string>(post.postName);
     const [description, setDescription] = useState<string>(post.postDescription || "");
     const [price, setPrice] = useState<number>(post.postPrice);
@@ -58,7 +58,7 @@ export default function PostEditClientComponent({ post }: {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 postId: post.postId,
-                postTitle: title,
+                postTittle: title,
                 postName: name,
                 postDescription: description,
                 postPrice: price,
@@ -67,7 +67,8 @@ export default function PostEditClientComponent({ post }: {
         });
 
         if (response.ok) {
-            alert('Post Info updated successfully.');
+            // alert('Post Info updated successfully.');
+            window.location.href = '/explore';
         }
         else alert('Error updating post.');
     };

@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingModal from '@/components/LoadingModal';
 import { useUser } from '@/context/UserContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,8 +14,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       console.log('Login attempted with:', { email, password });
       const res = await fetch('/api/auth/login', {
@@ -32,7 +36,7 @@ export default function LoginPage() {
       const { data } = await res.json();
       console.log("The returned userid is: ", data);
 
-      const profileRes = await fetch(`/api/user/profile?userid=${data}`,{
+      const profileRes = await fetch(`/api/user/profile?userid=${data}`, {
         method: 'GET',
         credentials: "include"
       });
@@ -49,15 +53,21 @@ export default function LoginPage() {
       document.cookie = `userData=${encodeURIComponent(JSON.stringify(profileData))}; path=/; max-age=${60 * 60 * 24}`; // 1-day expiration
 
       // Redirect to protected page on success
-      router.push('/explore');
+      // router.push('/explore');
+      window.location.href = '/explore';
     } catch (error) {
       console.log(error);
       setError('Invalid credentials. Please try again.');
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="h-[100vh] flex">
+      {isLoading && <LoadingModal />}
+
       {/* Left Side (Image) */}
       <div className="w-2/3 bg-gray-100 flex items-center justify-center">
         <img

@@ -97,7 +97,7 @@ export type PostImage = {
 export type Post = {
   postId: string;
   userId: string; // post owner id
-  postTitle: string;
+  postTittle: string;
   postName: string;
   postDescription: string | null; // allow null value when get all posts
   postPrice: number;
