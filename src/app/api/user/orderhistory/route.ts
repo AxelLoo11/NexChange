@@ -72,5 +72,5 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  return NextResponse.json(null, { status: 204 });
+  return NextResponse.json(null, { status: 200 });
 }

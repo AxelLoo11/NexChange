@@ -132,7 +132,7 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
-    return new NextResponse("Wish post deleted successfully", { status: 204 });
+    return new NextResponse("Wish post deleted successfully", { status: 200 });
   } catch (error) {
     console.log(error);
     return new NextResponse("Error deleting wish post", { status: 500 });
