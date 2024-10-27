@@ -1,5 +1,4 @@
 import { getTokenFromRequest } from "@/lib";
-import { error } from "console";
 // import { fakeGetUserProfileData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
