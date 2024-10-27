@@ -11,7 +11,7 @@ export default function OrderCard({ order, pathname }: { order: UserOrderHistory
         <div className={`flex w-full h-32 border border-gray-200 bg-white my-2 shadow-md`}
         >
             <img
-                src={order.refOrderShortcutURL}
+                src={order.refOrderShortCutURL}
                 alt="Order Shortcut"
                 className='w-32 h-32 rounded-sm flex-none p-2'
             />
