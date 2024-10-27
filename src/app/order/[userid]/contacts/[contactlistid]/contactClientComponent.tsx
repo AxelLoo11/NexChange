@@ -16,8 +16,12 @@ export default function ContactClientComponent({
     const [editingContact, setEditingContact] = useState<UserContact | null>(null);
 
     const handleSetDefault = async (contactId: string) => {
-        const updateContact = contacts.filter((ct) => ct.contactId === contactId);
-        const oridefaultContact = contacts.filter((ct) => ct.defaultContact === true);
+        const updateContact = contacts.find((ct) => ct.contactId === contactId);
+        const oridefaultContact = contacts.find((ct) => ct.defaultContact === true);
+
+        if (!updateContact) {
+            alert("Error set default");
+        }
 
         const newdefaultres = await fetch(`/api/user/contact`, {
             method: 'PUT',
@@ -30,15 +34,17 @@ export default function ContactClientComponent({
             return;
         }
 
-        const oridefaultres = await fetch(`/api/user/contact`, {
-            method: 'PUT',
-            cache: 'no-store',
-            credentials: 'include',
-            body: JSON.stringify({ ...oridefaultContact, defaultContact: false })
-        });
-        if (!oridefaultres.ok) {
-            alert("Update default contact failed ... ...");
-            return;
+        if (oridefaultContact) {
+            const oridefaultres = await fetch(`/api/user/contact`, {
+                method: 'PUT',
+                cache: 'no-store',
+                credentials: 'include',
+                body: JSON.stringify({ ...oridefaultContact, defaultContact: false })
+            });
+            if (!oridefaultres.ok) {
+                alert("Update default contact failed ... ...");
+                return;
+            }
         }
 
         setContacts((prevContacts) =>
