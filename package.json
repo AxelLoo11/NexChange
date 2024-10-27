@@ -12,10 +12,12 @@
     "@aws-sdk/client-s3": "^3.674.0",
     "@aws-sdk/s3-presigned-post": "^3.674.0",
     "@nextui-org/react": "^2.4.8",
+    "nexchange": "file:",
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
+    "serverless-next.js": "^1.15.0-alpha.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
