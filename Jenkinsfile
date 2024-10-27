@@ -22,6 +22,7 @@ pipeline {
         stage("Start") {
             steps {     
                 script {
+                    sh "cd ~"
                     sh "cd NexChange"
                     sh "tmux attach"
                     sh 'npm run build'
