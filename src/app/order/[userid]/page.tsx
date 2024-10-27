@@ -27,22 +27,33 @@ export default async function OrderHistoryPage({ params }: { params: { userid: s
       <div className="flex flex-col w-full lg:w-[calc(100vw-10rem)]">
         {/* Contacts Part */}
         <div className='flex flex-col w-full bg-white p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
-          <h2>User Defualt Contact: </h2>
-          <div className='flex w-full h-full border border-gray-600 rounded-lg hover:bg-gray-100'>
-            <div className='flex-auto p-2'>
-              <h2>{defaultContact.contactName}</h2>
-              <p>{defaultContact.contactNumber}</p>
-              <p>{`${defaultContact.contactAddress} - ${defaultContact.postalCode}`}</p>
+          <h2>User Default Contact: </h2>
+          {defaultContact ? (
+            <div className="flex w-full h-full border border-gray-600 rounded-lg hover:bg-gray-100">
+              <div className="flex-auto p-2">
+                <h2>{defaultContact.contactName}</h2>
+                <p>{defaultContact.contactNumber}</p>
+                <p>{`${defaultContact.contactAddress} - ${defaultContact.postalCode}`}</p>
+              </div>
+              <div className="flex-none h-full flex justify-center items-center">
+                <Link
+                  href={`/order/${params.userid}/contacts/${contactList.contactListId}`}
+                  className="h-full w-full flex justify-center items-center text-gray-500 px-2"
+                >
+                  Select &#11208; {/* Right Arrow */}
+                </Link>
+              </div>
             </div>
-            <div className='flex-none h-full flex justify-center items-center'>
+          ) : (
+            <div className="flex w-full h-full border border-gray-600 rounded-lg hover:bg-gray-100 justify-center items-center">
               <Link
                 href={`/order/${params.userid}/contacts/${contactList.contactListId}`}
-                className='h-full w-full flex justify-center items-center text-gray-500 px-2'
+                className="h-full w-full flex justify-center items-center text-gray-500 px-2"
               >
-                Select &#11208; {/* Right Arrow */}
+                Add New Contact ...
               </Link>
             </div>
-          </div>
+          )}
         </div>
         {/* Order History Container */}
         <div className='w-full flex-auto p-4'>

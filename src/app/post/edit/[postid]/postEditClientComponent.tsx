@@ -67,7 +67,8 @@ export default function PostEditClientComponent({ post }: {
         });
 
         if (response.ok) {
-            alert('Post Info updated successfully.');
+            // alert('Post Info updated successfully.');
+            window.location.href = '/explore';
         }
         else alert('Error updating post.');
     };
