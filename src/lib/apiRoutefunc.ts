@@ -21,5 +21,5 @@ export async function getTokenFromRequest(req: NextRequest): Promise<string> {
   if (!token || !tokenType) {
     throw new Error("Authorization token or token type missing");
   }
-  return `${tokenType}${token}`;
+  return decodeURIComponent(`${tokenType}${token}`);
 }
