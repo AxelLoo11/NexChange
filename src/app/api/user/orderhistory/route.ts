@@ -2,7 +2,7 @@ import { getTokenFromRequest } from "@/lib";
 // import { fakeGetUserOrderHistoryData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/order-histories`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/api/user-system/order-histories`;
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 // import { fakeGetAllPostData, fakeGetPostDataById } from "@/lib/fakeApiRouteFunc";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system/posts`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_POST_BACKEND_URL}/api/post-system/posts`;
 
 // get all posts | get post by postId
 export async function GET(req: NextRequest) {

@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 // import { fakeGetOrdertData } from "@/lib/fakeApiRouteFunc";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_ORDER_BACKEND_URL}/api/order-system/orders`;
 
 // get order by orderid/sellerid/buyerid ... ?   ---->>>  [currently only use `get by orderid` for static test]
 export async function GET(req: NextRequest) {

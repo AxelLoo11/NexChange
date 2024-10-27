@@ -3,7 +3,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8083/api/order-system/orders`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_ORDER_BACKEND_URL}/api/order-system/orders`;
 
 export async function GET(req: NextRequest) {
   const authHeader = await getTokenFromRequest(req);

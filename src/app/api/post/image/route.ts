@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTokenFromRequest } from "@/lib";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8082/api/post-system/posts/update`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_POST_BACKEND_URL}/api/post-system/posts/update`;
 
 // Add images ...
 export async function POST(req: NextRequest) {

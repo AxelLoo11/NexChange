@@ -1,7 +1,7 @@
 // import { mockCheckAuth } from "@/lib/fakeApiRouteFunc";
 import { NextResponse } from "next/server";
 
-const userServiceUrl: string = `${process.env.NEXT_PUBLIC_BACKEND_URL}:8081/api/user-system/auth/login`;
+const userServiceUrl: string = `${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/api/user-system/auth/login`;
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
