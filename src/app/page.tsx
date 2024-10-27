@@ -18,10 +18,10 @@ export default function HomePage() {
           {/* Links */}
           <div className="space-y-2">
             <Link href="/explore">
-              <a className="block text-lg font-medium underline">Explore Now →</a>
+              <p className="block text-lg font-medium underline">Explore Now →</p>
             </Link>
             <Link href="/login">
-              <a className="block text-lg font-medium underline">Login Here!</a>
+              <p className="block text-lg font-medium underline">Login Here!</p>
             </Link>
           </div>
         </div>
