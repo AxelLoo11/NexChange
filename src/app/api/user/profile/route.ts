@@ -1,4 +1,5 @@
 import { getTokenFromRequest } from "@/lib";
+import { error } from "console";
 // import { fakeGetUserProfileData } from "@/lib/fakeApiRouteFunc";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -52,6 +53,13 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify(body),
   });
 
-  const data = await res.json();
-  return NextResponse.json(data, { status: res.status });
+  if (!res.ok) {
+    return NextResponse.json(
+      { error: "Update profile failed" },
+      { status: res.status }
+    );
+  }
+
+  // const data = await res.json();
+  return NextResponse.json(null, { status: res.status });
 }

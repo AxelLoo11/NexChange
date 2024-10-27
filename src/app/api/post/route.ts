@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = await res.json();
-  return NextResponse.json(data, { status: res.status });
+  // const data = await res.json();
+  return NextResponse.json("Published new post ...", { status: res.status });
   // return NextResponse.json(body, { status: 200 });
 }
 
@@ -93,8 +93,8 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const data = await res.json();
-  return NextResponse.json(data, { status: res.status });
+  // const data = await res.json();
+  return NextResponse.json("Update post success", { status: res.status });
 }
 
 // delete post ...
@@ -122,5 +122,5 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  return NextResponse.json(null, { status: 204 });
+  return NextResponse.json(null, { status: 200 });
 }

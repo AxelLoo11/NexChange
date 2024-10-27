@@ -64,7 +64,7 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  const data = await res.json();
+  // const data = await res.json();
 
-  return NextResponse.json(data, { status: res.status });
+  return NextResponse.json("Delete image success", { status: res.status });
 }

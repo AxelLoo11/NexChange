@@ -94,8 +94,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const data = await response.json();
-    return new NextResponse(JSON.stringify(data), { status: 201 });
+    // const data = await response.json();
+    return new NextResponse("Add to wishlist success", { status: response.status });
   } catch (error) {
     console.log(error);
     return new NextResponse("Error creating wish post", { status: 500 });

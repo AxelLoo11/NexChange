@@ -82,8 +82,12 @@ export async function PUT(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    if (!response.ok) {
+      throw new Error("Update contact failed");
+    }
+
+    // const data = await response.json();
+    return NextResponse.json(null, {status: 200});
   } catch (error) {
     console.log(error);
     return NextResponse.json(
