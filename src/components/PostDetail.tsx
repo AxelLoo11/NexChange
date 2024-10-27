@@ -30,7 +30,7 @@ export default function PostDetail(
                 refPostPrice: post.postPrice,
                 refPostShortcutURL: post.postShortcutURL,
                 refPostStatus: post.postStatus,
-                refPostTitle: post.postTitle
+                refPostTitle: post.postTittle
             }),
             credentials: 'include',
         });
@@ -130,7 +130,7 @@ export default function PostDetail(
 
                     {/* Description (scrollable area) */}
                     <div className="flex-1 overflow-auto p-4">
-                        <h2 className="font-bold text-md mb-2">{post.postTitle}</h2>
+                        <h2 className="font-bold text-md mb-2">{post.postTittle}</h2>
                         <h3 className="font-bold text-md mb-2">{post.postName}</h3>
                         <p className="text-sm text-gray-600">{post.postDescription}</p>
                     </div>
@@ -179,7 +179,7 @@ export default function PostDetail(
                     </div>
                     {/* Decription */}
                     <div className='p-2'>
-                        <h2 className="font-bold text-md mb-2">{post.postTitle}</h2>
+                        <h2 className="font-bold text-md mb-2">{post.postTittle}</h2>
                         <p className="text-sm text-gray-600">{post.postDescription}</p>
                     </div>
                 </div>

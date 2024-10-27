@@ -23,7 +23,7 @@ const FeedCard = ({ post }: { post: Post }) => {
                     className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                    <h2 className="font-bold text-md mb-2">{post.postTitle}</h2>
+                    <h2 className="font-bold text-md mb-2">{post.postTittle}</h2>
                     <p className="text-sm text-gray-600">{post.postName}</p>
                     <p className="w-full flex text-md text-gray-600 justify-end">$ {post.postPrice}</p>
                 </div>

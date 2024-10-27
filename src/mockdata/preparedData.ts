@@ -166,7 +166,7 @@ const createFakePost = (
   return {
     postId: `testpost-${num.toString().padStart(3, "0")}`,
     userId: owner.userId,
-    postTitle: `Post ${num.toString().padStart(3, "0")}`,
+    postTittle: `Post ${num.toString().padStart(3, "0")}`,
     postName: `Product ${num.toString().padStart(3, "0")}`,
     postDescription: fakeDescription[num % 3],
     postPrice: num * 5.0,
@@ -185,7 +185,7 @@ const createFakePost = (
 export const getRefPost = (post: Post): RefPost => {
   return {
     refPostId: post.postId,
-    refPostTitle: post.postTitle,
+    refPostTitle: post.postTittle,
     refPostShortcutURL: post.postShortcutURL,
     refPostPrice: post.postPrice,
     refPostStatus: post.postStatus,
