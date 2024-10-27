@@ -19,45 +19,45 @@ pipeline {
             }
         }
 
-        stage("Start") {
-            steps {     
-                script {
-                    sh "cd $WORKSPACE/NexChange"
-                    sh "tmux attach"
-                    sh 'npm run build'
-                    sh 'npm run start'
-                }
-            }  
-        }
+    //     stage("Start") {
+    //         steps {     
+    //             script {
+    //                 sh "cd $WORKSPACE/NexChange"
+    //                 sh "tmux attach"
+    //                 sh 'npm run build'
+    //                 sh 'npm run start'
+    //             }
+    //         }  
+    //     }
 
-        stage('Build Project') {
-            steps {
-                // 构建Next.js项目
-                sh 'npm run build'
-            }
-        }
+    //     stage('Build Project') {
+    //         steps {
+    //             // 构建Next.js项目
+    //             sh 'npm run build'
+    //         }
+    //     }
 
-        stage('Stop Existing Application') {
-            steps {
-                // 检查并停止占用3000端口的进程
-                sh 'lsof -i :3000 && kill $(lsof -t -i :3000) || echo "No process running on port 3000"'
-            }
-        }
+    //     stage('Stop Existing Application') {
+    //         steps {
+    //             // 检查并停止占用3000端口的进程
+    //             sh 'lsof -i :3000 && kill $(lsof -t -i :3000) || echo "No process running on port 3000"'
+    //         }
+    //     }
 
-        stage('Start New Application') {
-            steps {
-                // 启动新的Next.js应用
-                sh 'npm run start &'
-            }
-        }
-    }
+    //     stage('Start New Application') {
+    //         steps {
+    //             // 启动新的Next.js应用
+    //             sh 'npm run start &'
+    //         }
+    //     }
+    // }
 
-    post {
-        success {
-            echo 'Deployment successful!'
-        }
-        failure {
-            echo 'Deployment failed.'
-        }
-    }
+    // post {
+    //     success {
+    //         echo 'Deployment successful!'
+    //     }
+    //     failure {
+    //         echo 'Deployment failed.'
+    //     }
+    // }
 }
