@@ -1,6 +1,6 @@
 const LoadingModal = () => (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-white p-4 rounded-lg shadow-lg">
+        <div className="flex flex-col bg-white p-4 rounded-lg shadow-lg justify-center items-center">
             <div className="loader"></div>
             <p className="text-center mt-2">Loading...</p>
         </div>

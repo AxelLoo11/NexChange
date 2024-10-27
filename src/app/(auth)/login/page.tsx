@@ -53,7 +53,8 @@ export default function LoginPage() {
       document.cookie = `userData=${encodeURIComponent(JSON.stringify(profileData))}; path=/; max-age=${60 * 60 * 24}`; // 1-day expiration
 
       // Redirect to protected page on success
-      router.push('/explore');
+      // router.push('/explore');
+      window.location.href = '/explore';
     } catch (error) {
       console.log(error);
       setError('Invalid credentials. Please try again.');
