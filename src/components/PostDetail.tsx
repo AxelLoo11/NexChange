@@ -70,7 +70,7 @@ export default function PostDetail(
                 throw new Error("Create Order error ...")
             }
 
-            const data = await res.json();
+            // const data = await res.json();
             // const orderId = data.orderId as string;
 
             // router.push(`/order/${userId}/${orderId}`);
