@@ -74,8 +74,8 @@ export default function PostDetail(
             // const orderId = data.orderId as string;
 
             // router.push(`/order/${userId}/${orderId}`);
-            setTimeout(()=>{return;}, 500);
-            window.location.href = `/order/${userId}/${data}`;
+            setTimeout(()=>{return;}, 1000);
+            window.location.href = `/order/${userId}`;
         } catch (error) {
             console.log(error);
             alert("Create New Order error ... please try again ...");

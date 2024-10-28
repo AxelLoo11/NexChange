@@ -38,7 +38,7 @@ export type UserOrderHistory = {
   orderHistoryId: string;
   refOrderId: string;
   refOrderTitle: string; // ref order's refPostTitle ?
-  refOrderShortCutURL: string;
+  refOrderShoutCutURL: string;
   refOrderPrice: number; // ref order's refPostPrice
   refOrderStatus: string;
 };
