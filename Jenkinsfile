@@ -18,7 +18,7 @@ pipeline {
                 checkout scm
             }
         }
-
+    }
     //     stage("Start") {
     //         steps {     
     //             script {
